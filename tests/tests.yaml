@@ -1,0 +1,12 @@
+bootstrap: true
+reset: true
+virtualenv: true
+makefile:
+    - lint
+sources:
+    - ppa:juju/stable
+packages:
+    - amulet
+    - python-distro-info
+    - distro-info
+    - distro-info-data

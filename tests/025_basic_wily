@@ -1,0 +1,7 @@
+#!/usr/bin/python
+"""Amulet tests on a basic ubuntu charm deployment on wily."""
+
+from basic_deployment import ubuntu_basic_deployment
+
+if __name__ == '__main__':
+    ubuntu_basic_deployment(series='wily')

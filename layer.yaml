@@ -1,0 +1,3 @@
+includes:
+ - 'layer:basic'
+repo: https://github.com/marcoceppi/charm-ubuntu
