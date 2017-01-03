@@ -19,7 +19,7 @@ def update_hostname():
     if not hostname:
         return
 
-    with open('/etc/hostname', 'wb') as f:
+    with open('/etc/hostname', 'w') as f:
         f.write(hostname)
 
     subprocess.check_call(['hostname', hostname])
