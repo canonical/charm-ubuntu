@@ -7,5 +7,7 @@ tags:
   - misc
 series:
   - xenial
+  - bionic
+  - artful
   - trusty
   - precise
