@@ -8,5 +8,6 @@ tags:
 series:
   - xenial
   - bionic
+  - artful
   - trusty
   - precise
