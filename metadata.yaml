@@ -9,5 +9,7 @@ series:
   - xenial
   - bionic
   - artful
+  - cosmic
+  - disco
   - trusty
   - precise
