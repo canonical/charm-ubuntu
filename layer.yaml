@@ -1,3 +1,6 @@
 includes:
  - 'layer:basic'
 repo: https://github.com/juju-solutions/charm-ubuntu
+options:
+  basic:
+    include_system_packages: true
