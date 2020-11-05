@@ -8,8 +8,6 @@ tags:
 series:
   - xenial
   - bionic
-  - artful
-  - cosmic
-  - disco
   - trusty
   - focal
+  - groovy
