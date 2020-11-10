@@ -45,5 +45,5 @@ This charm has no configuration options.
 
 ## Charm Contact Information
 
-- Author: Juju Charm Community, published by [marcoceppi](http://marcoceppi.com)
-- Report bugs at: [Github](http://github.com/marcoceppi/charm-ubuntu/issues)
+- Author: Juju Charm Community
+- Report bugs at: [Github](http://github.com/juju-solutions/charm-ubuntu/issues)
