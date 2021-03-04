@@ -1,6 +1,6 @@
 options:
   hostname:
     type: string
-    default: 
+    default: ""
     description: Override hostname of machine, when empty uses default machine hostname
 
