@@ -10,18 +10,21 @@ class TestCharm(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        pPath = mock.patch("charm.Path")
-        cls.mPath = pPath.start()
-        cls.addClassCleanup(pPath.stop)
+        cls.pPath = mock.patch("charm.Path")
+        cls.mPath = cls.pPath.start()
         cls.mPath().read_text.return_value = "DISTRIB_RELEASE = test\n"
 
-        pcheck_call = mock.patch("subprocess.check_call")
-        cls.mcheck_call = pcheck_call.start()
-        cls.addClassCleanup(pcheck_call.stop)
+        cls.pcheck_call = mock.patch("subprocess.check_call")
+        cls.mcheck_call = cls.pcheck_call.start()
 
         cls.harness = Harness(charm.UbuntuCharm)
         cls.harness.set_leader(is_leader=True)
         cls.harness.begin()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.pcheck_call.stop()
+        cls.pPath.stop()
 
     def test_version(self):
         # Set during cls.harness.begin()
