@@ -40,6 +40,7 @@ jobs:
         run: tox -e unit
   integration-test:
     name: Integration test with LXD
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v2
