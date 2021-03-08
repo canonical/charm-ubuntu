@@ -26,6 +26,7 @@ class UbuntuIntegrationTest(OperatorTest):
             "focal": "20.04",
             "bionic": "18.04",
             "xenial": "16.04",
+            "groovy": "20.10",
         }
         for series in self.meta["series"]:
             app = self.model.applications[series]
