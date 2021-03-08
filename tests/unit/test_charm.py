@@ -12,22 +12,26 @@ class TestCharm(TestCase):
     def setUpClass(cls):
         cls.pPath = mock.patch("charm.Path")
         cls.mPath = cls.pPath.start()
-        cls.mPath().read_text.return_value = "DISTRIB_RELEASE = test\n"
 
-        cls.pcheck_call = mock.patch("subprocess.check_call")
+        cls.pcheck_call = mock.patch("charm.check_call")
         cls.mcheck_call = cls.pcheck_call.start()
+
+        cls.pcheck_output = mock.patch("charm.check_output")
+        cls.mcheck_output = cls.pcheck_output.start()
+        cls.mcheck_output.return_value = b"test\n"
 
         cls.harness = Harness(charm.UbuntuCharm)
         cls.harness.set_leader(is_leader=True)
-        cls.harness.begin()
+        cls.harness.begin_with_initial_hooks()
 
     @classmethod
     def tearDownClass(cls):
+        cls.pcheck_output.stop()
         cls.pcheck_call.stop()
         cls.pPath.stop()
 
     def test_version(self):
-        # Set during cls.harness.begin()
+        # Set during cls.harness.begin_with_initial_hooks()
         assert self.harness.get_workload_version() == "test"
 
     def test_hostname(self):
