@@ -6,8 +6,7 @@ description: |
 tags:
   - misc
 series:
-  - xenial
-  - bionic
-  - trusty
   - focal
+  - bionic
+  - xenial
   - groovy
