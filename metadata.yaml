@@ -10,3 +10,15 @@ series:
   - bionic
   - xenial
   - groovy
+storage:
+  block:
+    type: block
+    description: block device
+    minimum-size: 100M
+    multiple:
+      range: 0-
+  files:
+    type: filesystem
+    description: Mounted filesystem
+    minimum-size: 100M
+    location: /srv/data
