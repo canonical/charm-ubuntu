@@ -36,7 +36,7 @@ class UbuntuCharm(CharmBase):
         set the application-level workload version to the Ubuntu version upon
         which the charm is running.
         """
-        self.unit.status = ActiveStatus()
+        self.unit.status = ActiveStatus(message="Ready")
         if not self.unit.is_leader():
             return
         try:
