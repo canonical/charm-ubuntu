@@ -1,4 +1,1 @@
-# ops>=1.0,<2.0
-# Needed due to https://github.com/canonical/operator/issues/517 not yet being
-# included in a released version.
-git+https://github.com/canonical/operator/#egg=ops
+ops>=1.0,<2.0
