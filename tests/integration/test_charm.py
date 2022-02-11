@@ -23,6 +23,7 @@ async def test_app_versions(ops_test):
         "focal": "20.04",
         "bionic": "18.04",
         "xenial": "16.04",
+        "impish": "21.10",
         "jammy": "22.04",
     }
     for series in meta["series"]:

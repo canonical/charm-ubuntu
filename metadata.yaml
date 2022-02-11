@@ -9,4 +9,5 @@ series:
   - focal
   - bionic
   - xenial
+  - impish
   - jammy
