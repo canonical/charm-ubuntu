@@ -22,7 +22,6 @@ async def test_app_versions(ops_test):
     expected = {
         "focal": "20.04",
         "bionic": "18.04",
-        "xenial": "16.04",
         "jammy": "22.04",
     }
     for series in meta["series"]:
