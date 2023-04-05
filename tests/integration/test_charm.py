@@ -18,12 +18,11 @@ async def test_build_and_deploy(ops_test):
 
 
 async def test_app_versions(ops_test):
-    """ Validate that the app versions are correct. """
+    """Validate that the app versions are correct."""
     expected = {
         "focal": "20.04",
         "bionic": "18.04",
-        "xenial": "16.04",
-        "groovy": "20.10",
+        "jammy": "22.04",
     }
     for series in meta["series"]:
         app = ops_test.model.applications[series]

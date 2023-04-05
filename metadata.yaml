@@ -8,8 +8,7 @@ tags:
 series:
   - focal
   - bionic
-  - xenial
-  - groovy
+  - jammy
 storage:
   block:
     type: block
