@@ -9,6 +9,7 @@ series:
   - focal
   - bionic
   - jammy
+  - lunar
 storage:
   block:
     type: block
