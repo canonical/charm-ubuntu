@@ -19,5 +19,7 @@ storage:
   files:
     type: filesystem
     description: Mounted filesystem
-    minimum-size: 100M
     location: /srv/data
+    minimum-size: 100M
+    multiple:
+      range: 0-
