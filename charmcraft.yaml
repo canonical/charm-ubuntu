@@ -1,3 +1,37 @@
+name: ubuntu
+title: Ubuntu
+summary: A pristine Ubuntu Server
+description: |
+  This simply deploys the Ubuntu Cloud/Server image
+links:
+  contact: Charmers <juju@lists.ubuntu.com>
+  issues:
+  - https://github.com/canonical/charm-ubuntu/issues
+  source:
+  - https://github.com/canonical/charm-ubuntu
+
+config:
+  options:
+    hostname:
+      type: string
+      default: ""
+      description: Override hostname of machine, when empty uses default machine hostname
+
+storage:
+  block:
+    type: block
+    description: block device
+    minimum-size: 100M
+    multiple:
+      range: 0-
+  files:
+    type: filesystem
+    description: Mounted filesystem
+    location: /srv/data
+    minimum-size: 100M
+    multiple:
+      range: 0-1
+
 type: charm
 bases:
   - build-on:
@@ -14,3 +48,10 @@ bases:
     - name: "ubuntu"
       channel: "22.04"
       architectures: [amd64, arm, arm64, i386, ppc64]
+    - name: "ubuntu"
+      channel: "24.04"
+      architectures: [amd64, arm, arm64, i386, ppc64]
+
+parts:
+  charm:
+    plugin: charm

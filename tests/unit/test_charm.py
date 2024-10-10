@@ -1,8 +1,20 @@
+import inspect
+from pathlib import Path
 from unittest import TestCase, mock
 
+import yaml
 from ops.testing import Harness
 
 import charm
+
+
+def charm_config() -> str:
+    """Return the charm configuration as a string readfrom charmcraft.yaml."""
+    filename = inspect.getfile(charm.UbuntuCharm)
+    charm_dir = Path(filename).parents[1]
+    content = (charm_dir / "charmcraft.yaml").read_text()
+    config = yaml.safe_load(content)["config"]
+    return yaml.safe_dump(config)
 
 
 class TestCharm(TestCase):
@@ -20,7 +32,7 @@ class TestCharm(TestCase):
         cls.mcheck_output = cls.pcheck_output.start()
         cls.mcheck_output.return_value = b"test\n"
 
-        cls.harness = Harness(charm.UbuntuCharm)
+        cls.harness = Harness(charm.UbuntuCharm, config=charm_config())
         cls.harness.set_leader(is_leader=True)
         cls.harness.begin_with_initial_hooks()
 
