@@ -41,16 +41,16 @@ bases:
     run-on:
     - name: "ubuntu"
       channel: "18.04"
-      architectures: [amd64, arm, arm64, i386, ppc64]
+      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
     - name: "ubuntu"
       channel: "20.04"
-      architectures: [amd64, arm, arm64, i386, ppc64]
+      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
     - name: "ubuntu"
       channel: "22.04"
-      architectures: [amd64, arm, arm64, i386, ppc64]
+      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
     - name: "ubuntu"
       channel: "24.04"
-      architectures: [amd64, arm, arm64, i386, ppc64]
+      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
 
 parts:
   charm:
