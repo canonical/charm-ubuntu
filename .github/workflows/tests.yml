@@ -4,7 +4,7 @@ on: [pull_request]
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python: ['3.6', '3.8', '3.10', '3.12']
@@ -22,7 +22,7 @@ jobs:
       run: tox -vve lint
   unit-test:
     name: Unit Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python: ['3.6', '3.8', '3.10', '3.12']
@@ -40,13 +40,13 @@ jobs:
         run: tox -e unit
   integration-test:
     name: Integration test with LXD
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
       - name: Read charmcraft version file
         id: charmcraft
-        run: echo "channel=$(cat .charmcraft-channel)" >> $GITHUB_OUTPUT        
+        run: echo "channel=$(cat .charmcraft-channel)" >> $GITHUB_OUTPUT
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
