@@ -51,3 +51,10 @@ class TestCharm(TestCase):
         self.mPath.assert_called_with("/etc/hostname")
         self.mPath().write_text.assert_called_once_with("foo")
         self.mcheck_call.assert_called_once_with(["hostname", "foo"])
+
+    def test_charm_ready(self):
+        """
+        See: https://github.com/openstack-charmers/zaza/blob/master/zaza/model.py#L1636
+        """
+        prefixes = ["ready", "Ready", "Unit is ready"]
+        self.assertIn(self.harness.model.unit.status.message, prefixes)
