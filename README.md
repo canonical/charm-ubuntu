@@ -2,6 +2,8 @@
 
 This charm provides a blank [Ubuntu](http://ubuntu.com) image. It does not provide any applications other than a blank cloud image for you to manage manually, it is intended for testing and development.
 
+Does not support subordinate charm relations.
+
 # Usage
 
 Step by step instructions on using this charm:
