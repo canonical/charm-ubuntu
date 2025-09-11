@@ -29,7 +29,7 @@ and so on.
 
 ## Known Limitations and Issues
 
-This charm does not provide anything other than a blank server, so it does not relate to other charms.
+This charm does not provide anything other than a blank server, so it does not relate to other charms, other than subordinate charm relations.
 
 # Configuration
 
