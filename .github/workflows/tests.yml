@@ -56,7 +56,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Setup operator environment
-        uses: charmed-kubernetes/actions-operator@3d3eb35d73c0f326d07880d83a99876d321f823c # v1.1.0
+        uses: charmed-kubernetes/actions-operator@ea90ed489690bf3b1c1fcca6ac5f9edab70aecb0 # main 2025-05-07 (includes pip/pipx fix)
         with:
           juju-channel: 3/stable
           charmcraft-channel: ${{ steps.charmcraft.outputs.channel }}
