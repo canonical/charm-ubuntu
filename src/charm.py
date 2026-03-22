@@ -8,7 +8,6 @@ from ops.charm import CharmBase
 from ops.main import main
 from ops.model import ActiveStatus
 
-
 log = logging.getLogger(__name__)
 
 

@@ -5,7 +5,6 @@ import pytest
 import yaml
 from juju.utils import ALL_SERIES_VERSIONS
 
-
 log = logging.getLogger(__name__)
 meta = yaml.safe_load(Path("charmcraft.yaml").read_text())
 CHANNEL_TO_SERIES = dict(reversed(mapping) for mapping in ALL_SERIES_VERSIONS.items())
