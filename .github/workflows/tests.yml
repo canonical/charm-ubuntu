@@ -52,7 +52,7 @@ jobs:
         id: charmcraft
         run: echo "channel=$(cat .charmcraft-channel)" >> $GITHUB_OUTPUT
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Setup operator environment
