@@ -1,6 +1,8 @@
 name: Test Suite
 on: [pull_request]
 
+permissions: {}
+
 jobs:
   lint:
     name: Lint
@@ -12,7 +14,9 @@ jobs:
       image: python:${{ matrix.python }}
     steps:
     - name: Check out code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     - name: Install Dependencies
       run: |
         pip install tox
@@ -28,7 +32,9 @@ jobs:
       image: python:${{ matrix.python }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Install Dependencies
         run: |
           pip install tox
@@ -39,16 +45,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - name: Read charmcraft version file
         id: charmcraft
         run: echo "channel=$(cat .charmcraft-channel)" >> $GITHUB_OUTPUT
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Setup operator environment
-        uses: charmed-kubernetes/actions-operator@main
+        uses: charmed-kubernetes/actions-operator@ea90ed489690bf3b1c1fcca6ac5f9edab70aecb0 # main 2025-05-07 (includes pip/pipx fix)
         with:
           juju-channel: 3/stable
           charmcraft-channel: ${{ steps.charmcraft.outputs.channel }}
