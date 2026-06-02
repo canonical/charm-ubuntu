@@ -1,4 +1,4 @@
-name: TIOBE Quality Checks
+name: TIOBE
 
 on:
   workflow_dispatch:
@@ -45,5 +45,5 @@ jobs:
           mode: qserver
           viewerUrl: https://canonical.tiobe.com/tiobeweb/TICS/api/cfg?name=default
           ticsAuthToken: ${{ secrets.TICSAUTHTOKEN }}
-          project: ubuntu
+          project: charm-ubuntu
           installTics: true
