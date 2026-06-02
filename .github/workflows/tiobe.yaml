@@ -27,7 +27,7 @@ jobs:
         # and keeps this isolated.
       - name: Generate coverage report
         run: |
-          pip install coverage pytest ipdb -r requirements.txt --break-system-packages
+          pip install coverage pytest -r requirements.txt --break-system-packages
           PYTHONPATH=src coverage run --source=src -m pytest tests/unit
           mkdir -p .report
           coverage xml -o .report/coverage.xml
