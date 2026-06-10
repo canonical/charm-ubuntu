@@ -3,9 +3,12 @@ from pathlib import Path
 from unittest import TestCase, mock
 
 import yaml
+import ops.testing
 from ops.testing import Harness
 
 import charm
+
+ops.testing.SIMULATE_CAN_CONNECT = True
 
 
 def charm_config() -> str:
