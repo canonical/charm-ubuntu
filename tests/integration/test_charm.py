@@ -8,8 +8,6 @@ from juju.utils import ALL_SERIES_VERSIONS
 log = logging.getLogger(__name__)
 meta = yaml.safe_load(Path("charmcraft.yaml").read_text())
 CHANNEL_TO_SERIES = dict(reversed(mapping) for mapping in ALL_SERIES_VERSIONS.items())
-# Fallback for channels not yet known to the installed juju library.
-CHANNEL_TO_SERIES.setdefault("26.04", "resolute")
 CHARM_SUPPORT = {
     CHANNEL_TO_SERIES[base["channel"]]: base["channel"]
     for base in meta["bases"][0]["run-on"]
