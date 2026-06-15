@@ -51,6 +51,9 @@ bases:
     - name: "ubuntu"
       channel: "24.04"
       architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
+    - name: "ubuntu"
+      channel: "26.04"
+      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
 
 parts:
   charm:
