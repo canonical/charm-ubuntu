@@ -11,9 +11,6 @@ from ops.testing import Harness
 
 import charm
 
-ops.testing.SIMULATE_CAN_CONNECT = True
-
-
 def charm_config() -> str:
     """Return the charm configuration as a string read from charmcraft.yaml."""
     filename = inspect.getfile(charm.UbuntuCharm)
