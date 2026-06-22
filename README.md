@@ -1,49 +1,78 @@
-# Overview
+# Ubuntu Charm
 
-This charm provides a blank [Ubuntu](http://ubuntu.com) image. It does not provide any applications other than a blank cloud image for you to manage manually, it is intended for testing and development.
+This charm provides a pristine [Ubuntu](https://ubuntu.com) cloud/server image. It does not provide any applications other than a blank cloud image for you to manage manually. It is intended for testing, development, and as a base for manual machine management.
 
-# Usage
+## Usage
 
-Step by step instructions on using this charm:
+Deploy the charm:
 
-    juju deploy ubuntu
+```bash
+juju deploy ubuntu
+```
 
-You can then ssh to the instance with:
+SSH to the instance:
 
-    juju ssh ubuntu/0
+```bash
+juju ssh ubuntu/0
+```
 
-## Scale out Usage
+### Scaling out
 
-This charm is not designed to be used at scale since it does not have any relationships, however you can bulk add machines with `add-unit`:
+This charm is not designed to be used at scale since it does not have any relations, however you can bulk add machines with `add-unit`:
 
-    juju add-unit ubuntu      # Add one more
-    juju add-unit -n5 ubuntu  # Add 5 at a time
+```bash
+juju add-unit ubuntu      # Add one more
+juju add-unit -n5 ubuntu  # Add 5 at a time
+```
 
+You can also alias names to organize a set of empty instances:
 
-You can also alias names in order to organize a bunch of empty instances:
+```bash
+juju deploy ubuntu mytestmachine1
+juju deploy ubuntu mytestmachine2
+```
 
-    juju deploy ubuntu mytestmachine1
-    juju deploy ubuntu mytestmachine2
+## Configuration
 
-and so on. 
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `hostname` | string | `""` | Override hostname of the machine. When empty, the default machine hostname is used. |
 
-## Known Limitations and Issues
+## Known Limitations
 
 This charm does not provide anything other than a blank server, so it does not relate to other charms, other than subordinate charm relations.
 
-# Configuration
+## Development
 
-This charm has no configuration options.
+Set up a Python virtual environment and install the dependencies:
 
-# Contact Information
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-## Upstream
+Run the linter:
 
-- [Ubuntu](http://ubuntu.com)
-- [Bug tracker](http://bugs.launchpad.net/ubuntu)
-- [Ubuntu Server Mailing list](https://lists.ubuntu.com/archives/ubuntu-server/)
+```bash
+tox -e lint
+```
 
-## Charm Contact Information
+Run the unit tests:
 
-- Author: Juju Charm Community
-- Report bugs at: [Github](http://github.com/juju-solutions/charm-ubuntu/issues)
+```bash
+tox -e unit
+```
+
+Run the integration tests:
+
+```bash
+tox -e integration
+```
+
+## Contact
+
+- [Upstream Ubuntu](https://ubuntu.com)
+- [Bug tracker](https://github.com/canonical/charm-ubuntu/issues)
+- [Ubuntu Server mailing list](https://lists.ubuntu.com/archives/ubuntu-server/)
+- [Matrix](https://matrix.to/#/#charmhub-charmdev:ubuntu.com)
