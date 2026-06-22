@@ -1,29 +1,15 @@
 # Testing
 [project]
 name = "charm-ubuntu"
-version = "0.0.0"  # Charm version is managed by Charmhub
+version = "0.0.0"           # Charm version is managed by Charmhub
 requires-python = ">=3.10"
-dependencies = [
-    "ops>=2.0",
-]
+dependencies = ["ops>=2.0"]
 
 [project.optional-dependencies]
-dev = [
-    "ruff",
-    "pytest",
-]
-lint = [
-    "ruff",
-]
-unit = [
-    "pytest",
-    "ops[testing]>=2.0",
-]
-integration = [
-    "pytest",
-    "pytest-operator",
-    "websockets<14",
-]
+dev = ["ruff", "pytest"]
+lint = ["ruff"]
+unit = ["pytest", "ops[testing]>=2.0"]
+integration = ["pytest", "pytest-operator", "websockets<14"]
 
 [tool.ruff]
 line-length = 99
@@ -32,22 +18,22 @@ src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "C",   # mccabe
-    "N",   # pep8-naming
-    "D",   # pydocstyle
-    "I",   # isort
-    "S",   # flake8-bandit
-    "SIM", # flake8-simplify
-    "TCH", # flake8-type-checking
-    "RUF", # ruff-specific rules
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "C",   # mccabe
+  "N",   # pep8-naming
+  "D",   # pydocstyle
+  "I",   # isort
+  "S",   # flake8-bandit
+  "SIM", # flake8-simplify
+  "TCH", # flake8-type-checking
+  "RUF", # ruff-specific rules
 ]
 ignore = [
-    "D100", # Missing docstring in module
-    "D104", # Missing docstring in package
-    "D107", # Missing docstring in __init__
+  "D100", # Missing docstring in module
+  "D104", # Missing docstring in package
+  "D107", # Missing docstring in __init__
 ]
 
 [tool.ruff.lint.pydocstyle]

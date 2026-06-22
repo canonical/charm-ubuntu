@@ -6,9 +6,9 @@ description: |
 links:
   contact: Charmers <juju@lists.ubuntu.com>
   issues:
-  - https://github.com/canonical/charm-ubuntu/issues
+    - https://github.com/canonical/charm-ubuntu/issues
   source:
-  - https://github.com/canonical/charm-ubuntu
+    - https://github.com/canonical/charm-ubuntu
 
 config:
   options:

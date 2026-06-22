@@ -9,25 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.10', '3.12']
+        python: ["3.10", "3.12"]
     container:
       image: python:${{ matrix.python }}
     steps:
-    - name: Check out code
-      uses: actions/checkout@v6.0.2
-      with:
-        persist-credentials: false
-    - name: Install Dependencies
-      run: |
-        pip install tox
-    - name: Run lint
-      run: tox -vve lint
+      - name: Check out code
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+      - name: Install Dependencies
+        run: |
+          pip install tox
+      - name: Run lint
+        run: tox -vve lint
   unit-test:
     name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.10', '3.12']
+        python: ["3.10", "3.12"]
     container:
       image: python:${{ matrix.python }}
     steps:
@@ -54,7 +54,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Setup operator environment
         uses: charmed-kubernetes/actions-operator@ea90ed489690bf3b1c1fcca6ac5f9edab70aecb0 # main 2025-05-07 (includes pip/pipx fix)
         with:
