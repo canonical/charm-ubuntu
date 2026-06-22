@@ -16,6 +16,8 @@ SSH to the instance:
 juju ssh ubuntu/0
 ```
 
+> **Note:** With Juju 4, you need to set up an SSH key before you can SSH into units. See the [Juju documentation on SSH keys](https://documentation.ubuntu.com/juju/latest/howto/manage-ssh-keys/) for details.
+
 ### Scaling out
 
 This charm is not designed to be used at scale since it does not have any relations, however you can bulk add machines with `add-unit`:
@@ -44,35 +46,33 @@ This charm does not provide anything other than a blank server, so it does not r
 
 ## Development
 
-Set up a Python virtual environment and install the dependencies:
+Install [uv](https://docs.astral.sh/uv/) and set up the dependencies:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+uv sync --group dev
 ```
 
 Run the linter:
 
 ```bash
-tox -e lint
+make lint
 ```
 
 Run the unit tests:
 
 ```bash
-tox -e unit
+make unit
 ```
 
 Run the integration tests:
 
 ```bash
-tox -e integration
+make integration
 ```
 
 ## Contact
 
-- [Upstream Ubuntu](https://ubuntu.com)
+- Upstream Ubuntu
 - [Bug tracker](https://github.com/canonical/charm-ubuntu/issues)
 - [Ubuntu Server mailing list](https://lists.ubuntu.com/archives/ubuntu-server/)
 - [Matrix](https://matrix.to/#/#charmhub-charmdev:ubuntu.com)

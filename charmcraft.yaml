@@ -4,7 +4,7 @@ summary: A pristine Ubuntu Server
 description: |
   This simply deploys the Ubuntu Cloud/Server image
 links:
-  contact: Charmers <juju@lists.ubuntu.com>
+  contact: https://matrix.to/#/#charmhub-charmdev:ubuntu.com
   issues:
     - https://github.com/canonical/charm-ubuntu/issues
   source:
@@ -32,13 +32,48 @@ storage:
     multiple:
       range: 0-1
 
-base: ubuntu@22.04
 type: charm
 platforms:
   amd64:
+    build-on:
+      - ubuntu@22.04
+      - ubuntu@24.04
+      - ubuntu@26.04
+    run-on:
+      - ubuntu@18.04
+      - ubuntu@20.04
+      - ubuntu@22.04
+      - ubuntu@24.04
+      - ubuntu@26.04
   arm64:
+    build-on:
+      - ubuntu@22.04
+      - ubuntu@24.04
+      - ubuntu@26.04
+    run-on:
+      - ubuntu@18.04
+      - ubuntu@20.04
+      - ubuntu@22.04
+      - ubuntu@24.04
+      - ubuntu@26.04
   s390x:
+    build-on:
+      - ubuntu@22.04
+      - ubuntu@24.04
+    run-on:
+      - ubuntu@18.04
+      - ubuntu@20.04
+      - ubuntu@22.04
+      - ubuntu@24.04
   ppc64el:
+    build-on:
+      - ubuntu@22.04
+      - ubuntu@24.04
+    run-on:
+      - ubuntu@18.04
+      - ubuntu@20.04
+      - ubuntu@22.04
+      - ubuntu@24.04
 
 parts:
   charm:

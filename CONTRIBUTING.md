@@ -32,25 +32,22 @@ To help us review your changes, please rebase your pull request onto the `master
 
 # Development
 
-Set up a Python virtual environment and install the dependencies:
+Install [uv](https://docs.astral.sh/uv/) and set up the dependencies:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-pip install --group dev  # from pyproject.toml
+uv sync --group dev
 ```
 
 ## Linting and formatting
 
-We use [ruff](https://docs.astral.sh/ruff/) for linting and formatting:
+We use [ruff](https://docs.astral.sh/ruff/) for linting and formatting, and [pyright](https://github.com/microsoft/pyright) for type checking:
 
 ```bash
-tox -e lint     # Check for issues
-tox -e format   # Auto-fix issues
+make lint     # Check for issues
+make format   # Auto-fix issues
 ```
 
-You can also use [pre-commit](https://pre-commit.com/) to run ruff automatically:
+You can also use [pre-commit](https://pre-commit.com/) to run checks automatically:
 
 ```bash
 pre-commit install
@@ -59,6 +56,6 @@ pre-commit install
 ## Running tests
 
 ```bash
-tox -e unit          # Unit tests
-tox -e integration   # Integration tests (requires LXD/Juju)
+make unit          # Unit tests
+make integration   # Integration tests (requires LXD/Juju)
 ```

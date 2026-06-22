@@ -1,15 +1,14 @@
-# Testing
 [project]
 name = "charm-ubuntu"
 version = "0.0.0"           # Charm version is managed by Charmhub
 requires-python = ">=3.10"
-dependencies = ["ops>=2.0"]
+dependencies = ["ops>=3.0"]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = ["ruff", "pytest"]
-lint = ["ruff"]
-unit = ["pytest", "ops[testing]>=2.0"]
-integration = ["pytest", "pytest-operator", "websockets<14"]
+lint = ["ruff", "pyright"]
+unit = ["pytest", "ops[testing]>=3.0"]
+integration = ["pytest", "pytest-jubilant", "jubilant"]
 
 [tool.ruff]
 line-length = 99
@@ -30,11 +29,6 @@ select = [
   "TCH", # flake8-type-checking
   "RUF", # ruff-specific rules
 ]
-ignore = [
-  "D100", # Missing docstring in module
-  "D104", # Missing docstring in package
-  "D107", # Missing docstring in __init__
-]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -46,3 +40,7 @@ check-typing-modules = ["src"]
 minversion = "7.0"
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[tool.pyright]
+pythonVersion = "3.10"
+include = ["src", "tests"]
