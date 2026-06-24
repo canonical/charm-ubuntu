@@ -27,7 +27,7 @@ juju add-unit ubuntu      # Add one more
 juju add-unit -n5 ubuntu  # Add 5 at a time
 ```
 
-You can also alias names to organize a set of empty instances:
+You can also alias names to manage a set of Ubuntu instances:
 
 ```bash
 juju deploy ubuntu mytestmachine1
