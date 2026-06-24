@@ -44,32 +44,6 @@ juju deploy ubuntu mytestmachine2
 
 This charm does not provide anything other than a blank server, so it does not relate to other charms, other than subordinate charm relations.
 
-## Development
-
-Install [uv](https://docs.astral.sh/uv/) and set up the dependencies:
-
-```bash
-uv sync --group dev
-```
-
-Run the linter:
-
-```bash
-make lint
-```
-
-Run the unit tests:
-
-```bash
-make unit
-```
-
-Run the integration tests:
-
-```bash
-make integration
-```
-
 ## Contact
 
 - Upstream Ubuntu
