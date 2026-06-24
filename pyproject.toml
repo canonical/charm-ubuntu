@@ -33,8 +33,8 @@ select = [
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.lint.flake8-bandit]
-check-typing-modules = ["src"]
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"

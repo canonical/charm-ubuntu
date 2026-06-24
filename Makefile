@@ -2,7 +2,7 @@
 
 lint:
 	uv run --group lint ruff check src tests
-	uv run --group lint pyright src tests
+	uv run --group lint --group unit --group integration pyright src tests
 	uv run --group lint ruff format --check src tests
 
 format:

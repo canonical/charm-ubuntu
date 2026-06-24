@@ -17,4 +17,4 @@ def test_app_versions(charm: pathlib.Path, juju: jubilant.Juju) -> None:
     """Validate that the app version is set correctly."""
     status = juju.wait(jubilant.all_active)
     app = status.apps["ubuntu"]
-    assert app.workload_version is not None
+    assert app.version is not None
