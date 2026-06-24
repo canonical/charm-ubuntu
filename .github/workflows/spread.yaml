@@ -18,9 +18,11 @@ jobs:
         run: echo "channel=$(cat .charmcraft-channel)" >> $GITHUB_OUTPUT
 
       - name: Build charm
+        env:
+          CHARMCRAFT_CHANNEL: ${{ steps.charmcraft.outputs.channel }}
         run: |
           sudo snap install --classic charmcraft
-          charmcraft pack --channel ${{ steps.charmcraft.outputs.channel }}
+          charmcraft pack --channel "$CHARMCRAFT_CHANNEL"
 
       - name: Install spread
         run: sudo snap install spread
