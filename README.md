@@ -48,5 +48,4 @@ This charm does not provide anything other than a blank server, so it does not r
 
 - Upstream Ubuntu
 - [Bug tracker](https://github.com/canonical/charm-ubuntu/issues)
-- [Ubuntu Server mailing list](https://lists.ubuntu.com/archives/ubuntu-server/)
 - [Matrix](https://matrix.to/#/#charmhub-charmdev:ubuntu.com)
