@@ -6,7 +6,7 @@ dependencies = ["ops>=3.0"]
 
 [dependency-groups]
 dev = ["ruff", "pytest"]
-lint = ["ruff", "pyright"]
+lint = ["ruff", "pyright", "zizmor"]
 unit = ["pytest", "ops[testing]>=3.0"]
 integration = ["pytest", "pytest-jubilant", "jubilant"]
 
