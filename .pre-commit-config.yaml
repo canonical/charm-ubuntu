@@ -22,3 +22,10 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+  - repo: local
+    hooks:
+      - id: zizmor
+        name: zizmor (uv)
+        entry: uvx zizmor
+        language: system
+        files: '^\.github/workflows/.*\.ya?ml$'
