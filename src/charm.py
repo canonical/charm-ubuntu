@@ -27,7 +27,7 @@ class UbuntuCharm(ops.CharmBase):
 
     def _set_version(self, event: ops.EventBase) -> None:
         """Set application version to the Ubuntu release on the leader unit."""
-        self.unit.status = ops.ActiveStatus("ready")
+        self.unit.status = ops.ActiveStatus()
         if not self.unit.is_leader():
             return
         try:
@@ -45,7 +45,7 @@ class UbuntuCharm(ops.CharmBase):
 
         pathlib.Path("/etc/hostname").write_text(hostname)
         subprocess.check_call(["hostname", hostname])  # noqa: S603, S607
-        self.unit.status = ops.ActiveStatus("ready")
+        self.unit.status = ops.ActiveStatus()
 
 
 if __name__ == "__main__":
