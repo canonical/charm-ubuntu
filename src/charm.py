@@ -17,8 +17,7 @@ logger = logging.getLogger(__name__)
 class UbuntuCharm(ops.CharmBase):
     """Charm that deploys a pristine Ubuntu cloud/server image."""
 
-    def __init__(self, framework: ops.Framework) -> None:
-        """Initialize charm and register event observers."""
+    def __init__(self, framework: ops.Framework):
         super().__init__(framework)
 
         framework.observe(self.on.install, self._set_version)
