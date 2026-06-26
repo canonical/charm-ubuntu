@@ -1,11 +1,13 @@
-summary: Run basic deployment tests
+summary: Deploy charm on Ubuntu 22.04 (Jammy)
+environment:
+  BASE: "22.04"
 systems:
   - ubuntu-24.04
 
 execute: |
   pushd "$SPREAD_PATH"
 
-  args="tests/integration/test_charm.py"
+  args="--base=$BASE tests/integration/test_charm.py"
 
   if [[ -f "$PWD"/ubuntu_*.charm ]]; then
     charm_path="$(ls "$PWD"/ubuntu_*.charm | head -1)"

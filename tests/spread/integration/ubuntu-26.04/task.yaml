@@ -1,0 +1,23 @@
+summary: Deploy charm on Ubuntu 26.04 (Resolute)
+environment:
+  BASE: "26.04"
+systems:
+  - ubuntu-24.04
+
+execute: |
+  pushd "$SPREAD_PATH"
+
+  args="--base=$BASE tests/integration/test_charm.py"
+
+  if [[ -f "$PWD"/ubuntu_*.charm ]]; then
+    charm_path="$(ls "$PWD"/ubuntu_*.charm | head -1)"
+    args="--charm-path=$charm_path $args"
+  fi
+
+  make integration ARGS="$args"
+
+restore: |
+  if [[ -z "${CI:-}" ]]; then
+    juju destroy-model --no-prompt --destroy-storage testing
+    juju add-model testing
+  fi
