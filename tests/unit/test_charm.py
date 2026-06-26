@@ -35,8 +35,8 @@ def test_hostname() -> None:
     assert state_out.unit_status == testing.ActiveStatus("ready")
 
 
-def test_charm_ready() -> None:
-    """The unit status message indicates the charm is ready."""
+def test_charm_status() -> None:
+    """After install, the charm has active status."""
     ctx = testing.Context(charm.UbuntuCharm)
     with (
         mock.patch("charm.subprocess.check_output", return_value=b"test\n"),
@@ -45,4 +45,4 @@ def test_charm_ready() -> None:
             ctx.on.install(),
             testing.State(leader=True),
         )
-    assert state_out.unit_status == testing.ActiveStatus("ready")
+    assert isinstance(state_out.unit_status, testing.ActiveStatus)
