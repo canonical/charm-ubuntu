@@ -16,14 +16,20 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
       - id: detect-private-key
-  - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.13
-    hooks:
-      - id: ruff
-        args: [--fix]
-      - id: ruff-format
   - repo: local
     hooks:
+      - id: ruff
+        name: ruff (uv)
+        entry: uv run --group lint ruff check --fix
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: ruff-format
+        name: ruff-format (uv)
+        entry: uv run --group lint ruff format
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
       - id: zizmor
         name: zizmor (uv)
         entry: uvx zizmor

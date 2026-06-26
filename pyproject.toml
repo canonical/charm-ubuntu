@@ -40,6 +40,16 @@ convention = "google"
 minversion = "7.0"
 testpaths = ["tests"]
 pythonpath = ["src"]
+filterwarnings = [
+  "error",
+  # opentelemetry (transitive via ops) uses the deprecated importlib.metadata
+  # SelectableGroups interface on Python 3.10. Harmless; drop once Python 3.10
+  # is no longer supported or opentelemetry releases a fix.
+  "ignore:SelectableGroups dict interface is deprecated:DeprecationWarning",
+  # ops[testing] leaks an unclosed charmcraft.yaml file handle on Python 3.14.
+  # Fixed on canonical/operator main; drop once the next ops release ships.
+  "ignore::pytest.PytestUnraisableExceptionWarning",
+]
 
 [tool.pyright]
 pythonVersion = "3.10"

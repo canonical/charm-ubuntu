@@ -18,6 +18,7 @@ class UbuntuCharm(ops.CharmBase):
     """Charm that deploys a pristine Ubuntu cloud/server image."""
 
     def __init__(self, framework: ops.Framework):
+        """Initialise the charm and register event observers."""
         super().__init__(framework)
 
         framework.observe(self.on.install, self._set_version)
