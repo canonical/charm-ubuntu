@@ -34,47 +34,22 @@ storage:
 
 type: charm
 platforms:
-  amd64:
-    build-on:
-      - ubuntu@22.04
-      - ubuntu@24.04
-      - ubuntu@26.04
-    run-on:
-      - ubuntu@18.04
-      - ubuntu@20.04
-      - ubuntu@22.04
-      - ubuntu@24.04
-      - ubuntu@26.04
-  arm64:
-    build-on:
-      - ubuntu@22.04
-      - ubuntu@24.04
-      - ubuntu@26.04
-    run-on:
-      - ubuntu@18.04
-      - ubuntu@20.04
-      - ubuntu@22.04
-      - ubuntu@24.04
-      - ubuntu@26.04
-  s390x:
-    build-on:
-      - ubuntu@22.04
-      - ubuntu@24.04
-    run-on:
-      - ubuntu@18.04
-      - ubuntu@20.04
-      - ubuntu@22.04
-      - ubuntu@24.04
-  ppc64el:
-    build-on:
-      - ubuntu@22.04
-      - ubuntu@24.04
-    run-on:
-      - ubuntu@18.04
-      - ubuntu@20.04
-      - ubuntu@22.04
-      - ubuntu@24.04
+  ubuntu@22.04:amd64:
+  ubuntu@22.04:arm64:
+  ubuntu@22.04:s390x:
+  ubuntu@22.04:ppc64el:
+  ubuntu@24.04:amd64:
+  ubuntu@24.04:arm64:
+  ubuntu@24.04:s390x:
+  ubuntu@24.04:ppc64el:
+  ubuntu@26.04:amd64:
+  ubuntu@26.04:arm64:
+  ubuntu@26.04:s390x:
+  ubuntu@26.04:ppc64el:
 
 parts:
   charm:
-    plugin: charm
+    plugin: uv
+    source: .
+    build-snaps:
+      - astral-uv
