@@ -26,7 +26,7 @@ jobs:
       - name: Run spread
         env:
           CI: "true"
-        run: spread -v lxd:ubuntu-24.04
+        run: spread -v lxd:ubuntu-26.04
 
       - name: Tear down on failure
         if: failure()
