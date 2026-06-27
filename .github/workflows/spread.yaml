@@ -13,13 +13,15 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build charm
+      - name: Set up runner
         run: |
-          sudo snap install --classic charmcraft
-          charmcraft pack
+          sudo snap install --classic concierge
+          sudo concierge prepare --trace -p machine
+          go install github.com/canonical/spread/cmd/spread@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
-      - name: Install spread
-        run: sudo snap install spread
+      - name: Build charm
+        run: charmcraft pack
 
       - name: Run spread
         env:
