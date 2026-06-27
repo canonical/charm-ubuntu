@@ -28,6 +28,6 @@ jobs:
           CI: "true"
         run: spread -v lxd:ubuntu-24.04
 
-      - name: Discard LXD instance on failure
+      - name: Tear down on failure
         if: failure()
-        run: spread -v lxd:ubuntu-24.04 discard
+        run: sudo concierge restore --trace
