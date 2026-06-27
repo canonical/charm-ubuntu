@@ -44,6 +44,7 @@ suites:
     summary: Spread tests - charm integration tests
     environment:
       CONCIERGE_JUJU_CHANNEL/juju_3_6: 3.6/stable
+      CONCIERGE_JUJU_CHANNEL/juju_4_0: 4.0/stable
     prepare-each: |
       snap install --classic concierge
       concierge prepare --trace -p machine --extra-snaps astral-uv --extra-debs make
