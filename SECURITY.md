@@ -2,18 +2,18 @@
 
 ## Product architecture
 
-charm-ubuntu is a packaging-layer charm that deploys a pristine Ubuntu
-Server image and applies a small amount of configuration (hostname,
-mounted storage). It runs no daemons of its own and exposes no network
-surface beyond what the base Ubuntu image and the operator's deployment
-add.
+The Ubuntu charm is a packaging-layer charm that deploys a pristine
+Ubuntu Server image and applies a small amount of configuration
+(hostname, mounted storage). It runs no daemons of its own and exposes
+no network surface beyond what the base Ubuntu image and the operator's
+deployment add.
 
-The diagram below shows where charm-ubuntu sits and the trust boundaries
-that follow:
+The diagram below shows where the Ubuntu charm sits and the trust
+boundaries that follow:
 
 ```mermaid
 flowchart LR
-    Juju["Juju agent"] -->|hook context| Charm["charm-ubuntu<br/>(charm process)"]
+    Juju["Juju agent"] -->|hook context| Charm["Ubuntu charm<br/>(charm process)"]
     Charm -->|hostname, storage config| Base["Ubuntu base<br/>(kernel, apt, services)"]
     Base -->|optional| Net["Network"]
     Charm -.->|`juju-log`| Juju
@@ -23,7 +23,7 @@ More detail:
 
 - **Juju ↔ charm code:** the charm receives configuration and lifecycle
   events from Juju over the standard Juju agent channel; no network
-  listener is opened by charm-ubuntu itself.
+  listener is opened by the charm itself.
 - **Charm ↔ Ubuntu base:** the charm applies hostname and storage
   configuration to the underlying Ubuntu base, which is the security
   boundary for everything else (kernel, package set, default services).
@@ -32,7 +32,7 @@ More detail:
 
 ## Secure by design
 
-charm-ubuntu is intentionally minimal:
+The Ubuntu charm is intentionally minimal:
 
 - No cryptography is implemented or configured by the charm.
 - No long-running processes are started by the charm.
@@ -47,8 +47,8 @@ selection: deploy with the most recent supported LTS where possible.
 
 ## Cryptography
 
-charm-ubuntu does not implement, configure, or expose any cryptographic
-technology. TLS, package signing, storage encryption, and kernel-level
+The Ubuntu charm does not implement, configure, or expose any
+cryptographic technology. TLS, package signing, storage encryption, and kernel-level
 crypto are all provided by the Ubuntu base and the [Ubuntu cryptographic
 packages](https://ubuntu.com/security/certifications/docs/cryptographic-packages),
 which the charm does not override.
@@ -60,7 +60,7 @@ volumes the charm attaches.
 
 ## Hardening
 
-To harden a charm-ubuntu deployment, harden the Ubuntu base:
+To harden a deployment of the Ubuntu charm, harden the Ubuntu base:
 
 - [Ubuntu server security
   documentation](https://documentation.ubuntu.com/server/explanation/intro-to/security/)
@@ -74,7 +74,7 @@ To harden a charm-ubuntu deployment, harden the Ubuntu base:
   — controller-side hardening.
 
 The charm itself adds no further hardening surface; once the base and the
-controller are hardened, there is nothing extra to do in charm-ubuntu.
+controller are hardened, there is nothing extra to do in the charm.
 
 ## Logging and monitoring
 
@@ -83,7 +83,7 @@ anything written to `stdout` or `stderr` is also captured by Juju.
 Messages are surfaced through `juju debug-log` using Juju's own log
 levels and storage.
 
-charm-ubuntu emits no structured security events under the
+The Ubuntu charm emits no structured security events under the
 [OWASP application logging
 vocabulary](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Vocabulary_Cheat_Sheet.html):
 the charm has no authentication, authorisation, admin, or user-management
@@ -93,7 +93,8 @@ operator's responsibility and uses the standard Ubuntu mechanisms.
 
 ## Decommissioning
 
-To remove a charm-ubuntu deployment, run `juju remove-application ubuntu`.
+To remove a deployment of the Ubuntu charm, run
+`juju remove-application ubuntu`.
 Juju tears down the unit and releases the underlying machine, its storage
 volumes, and any attached block devices to the cloud provider. The Ubuntu
 base image contains no persistent charm state once the unit is removed.
@@ -105,7 +106,8 @@ as a separate step.
 
 ## Security lifecycle
 
-The security support lifetime for a charm-ubuntu deployment mirrors the
+The security support lifetime for a deployment of the Ubuntu charm
+mirrors the
 [Ubuntu release lifecycle](https://ubuntu.com/about/release-cycle) of the
 base being deployed. LTS releases receive standard security maintenance
 for 5 years; interim releases receive security maintenance for 9 months.
@@ -148,7 +150,7 @@ instructions](https://ubuntu.com/security/disclosure-policy#contact-us).
 Please include a description of the issue, the steps you took to find
 it, affected versions, and, if known, mitigations.
 
-The charm-ubuntu GitHub admins will be notified and will work with you to
+The Ubuntu charm's GitHub admins will be notified and will work with you to
 determine whether the issue qualifies as a security issue and, if so, in
 which component. We then figure out a fix, get a CVE assigned, and
 coordinate the release of the fix. Our vulnerability management team
@@ -161,7 +163,7 @@ policy](https://ubuntu.com/security/disclosure-policy) contains more
 information about what you can expect when you contact us, and what we
 expect from you.
 
-To stay informed about charm-ubuntu vulnerabilities, watch:
+To stay informed about Ubuntu charm vulnerabilities, watch:
 
 - The [GitHub Security Advisories for
   `canonical/charm-ubuntu`](https://github.com/canonical/charm-ubuntu/security/advisories).
