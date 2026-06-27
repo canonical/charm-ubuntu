@@ -13,16 +13,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Read charmcraft version file
-        id: charmcraft
-        run: echo "channel=$(cat .charmcraft-channel)" >> $GITHUB_OUTPUT
-
       - name: Build charm
-        env:
-          CHARMCRAFT_CHANNEL: ${{ steps.charmcraft.outputs.channel }}
         run: |
           sudo snap install --classic charmcraft
-          charmcraft pack --channel "$CHARMCRAFT_CHANNEL"
+          charmcraft pack
 
       - name: Install spread
         run: sudo snap install spread
