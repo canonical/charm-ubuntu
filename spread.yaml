@@ -35,10 +35,15 @@ backends:
       - ubuntu-24.04:
           username: spread
           workers: 1
+      - ubuntu-26.04:
+          username: spread
+          workers: 1
 
 suites:
   tests/spread/integration/:
     summary: Spread tests - charm integration tests
+    environment:
+      CONCIERGE_JUJU_CHANNEL/juju_3_6: 3.6/stable
     prepare-each: |
       snap install --classic concierge
       concierge prepare --trace -p machine --extra-snaps astral-uv --extra-debs make
@@ -53,6 +58,13 @@ suites:
         concierge restore --trace
         apt autoremove -y --purge
       fi
+
+  tests/spread/unit/:
+    summary: Spread tests - unit tests
+    prepare-each: |
+      sudo apt update
+      sudo apt install -y make
+      sudo snap install --classic astral-uv
 
 exclude:
   - .coverage
