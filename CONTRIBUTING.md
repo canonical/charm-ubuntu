@@ -57,5 +57,5 @@ pre-commit install
 
 ```bash
 make unit          # Unit tests
-make integration   # Integration tests (requires LXD/Juju)
+make integration   # Integration tests (requires a Juju controller and a machine cloud)
 ```
