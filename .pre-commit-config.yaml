@@ -32,6 +32,6 @@ repos:
         require_serial: true
       - id: zizmor
         name: zizmor (uv)
-        entry: uvx zizmor
+        entry: uv run --group lint zizmor
         language: system
         files: '^\.github/workflows/.*\.ya?ml$'

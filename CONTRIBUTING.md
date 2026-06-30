@@ -32,11 +32,7 @@ To help us review your changes, please rebase your pull request onto the `master
 
 # Development
 
-Install [uv](https://docs.astral.sh/uv/) and set up the dependencies:
-
-```bash
-uv sync --group dev
-```
+Install [uv](https://docs.astral.sh/uv/). The `make` targets below will set up the appropriate dependency groups on demand.
 
 ## Linting and formatting
 
@@ -50,7 +46,7 @@ make format   # Auto-fix issues
 You can also use [pre-commit](https://pre-commit.com/) to run checks automatically:
 
 ```bash
-pre-commit install
+uvx pre-commit install
 ```
 
 ## Running tests
