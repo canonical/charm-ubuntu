@@ -16,9 +16,8 @@ jobs:
       - name: Set up runner
         run: |
           sudo snap install --classic concierge
+          sudo snap install --classic charmcraft
           sudo concierge prepare --trace -p machine
-          go install github.com/canonical/spread/cmd/spread@latest
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
 
       - name: Build charm
         run: charmcraft pack
@@ -26,7 +25,7 @@ jobs:
       - name: Run spread
         env:
           CI: "true"
-        run: spread -v lxd:ubuntu-26.04
+        run: charmcraft.spread -v lxd:ubuntu-26.04
 
       - name: Tear down on failure
         if: failure()

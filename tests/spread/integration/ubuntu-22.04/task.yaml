@@ -14,7 +14,7 @@ execute: |
     args="--charm-path=$charm_path $args"
   fi
 
-  make integration ARGS="$args"
+  make integration-execution ARGS="$args"
 
 restore: |
   if [[ -z "${CI:-}" ]]; then

@@ -32,7 +32,7 @@ To help us review your changes, please rebase your pull request onto the `master
 
 # Development
 
-Install [uv](https://docs.astral.sh/uv/). The `make` targets below will set up the appropriate dependency groups on demand.
+Install [uv](https://docs.astral.sh/uv/) and [charmcraft](https://documentation.ubuntu.com/charmcraft/4.3/) (`sudo snap install --classic charmcraft`). The `make` targets below will set up the appropriate dependency groups on demand. `charmcraft.spread` (bundled with the charmcraft snap) is used to run integration tests.
 
 ## Linting and formatting
 
@@ -53,5 +53,16 @@ uvx pre-commit install
 
 ```bash
 make unit          # Unit tests
-make integration   # Integration tests (requires a Juju controller and a machine cloud)
+make integration   # Integration tests, run in an isolated VM via spread
 ```
+
+`make integration` invokes [`charmcraft.spread`](https://github.com/canonical/spread/), which spins up an LXD VM, prepares it with [concierge](https://github.com/canonical/concierge), and runs the integration tests against each supported Ubuntu base. Use `make integration-debug` to drop into a shell on failure.
+
+To select an individual spread task, run `charmcraft.spread` directly:
+
+```bash
+charmcraft.spread -list
+charmcraft.spread -v -debug -reuse lxd:ubuntu-26.04:tests/spread/integration/ubuntu-24.04:juju_3_6
+```
+
+If you already have a Juju controller and a machine cloud set up and want to skip the spread wrapper, `make integration-execution` runs the pytest invocation directly (this is the same target the spread VM uses internally).
