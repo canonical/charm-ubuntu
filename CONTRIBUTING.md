@@ -32,7 +32,7 @@ To help us review your changes, please rebase your pull request onto the `master
 
 # Development
 
-Install [uv](https://docs.astral.sh/uv/) and [charmcraft](https://documentation.ubuntu.com/charmcraft/4.3/) (`sudo snap install --classic charmcraft`). The `make` targets below will set up the appropriate dependency groups on demand. `charmcraft.spread` (bundled with the charmcraft snap) is used to run integration tests.
+Install [uv](https://docs.astral.sh/uv/) and [Charmcraft](https://documentation.ubuntu.com/charmcraft/4.3/) (`sudo snap install --classic charmcraft`). The `make` targets below will set up the appropriate dependency groups on demand. `charmcraft.spread` (bundled with the Charmcraft snap) is used to run integration tests.
 
 ## Linting and formatting
 
@@ -53,7 +53,7 @@ uvx pre-commit install
 
 ```bash
 make unit          # Unit tests
-make integration   # Integration tests, run in an isolated VM via spread
+make integration   # Integration tests, run in an isolated VM via Spread
 ```
 
 `make integration` invokes [`charmcraft.spread`](https://github.com/canonical/spread/), which spins up an LXD VM, prepares it with [concierge](https://github.com/canonical/concierge), and runs the integration tests against each supported Ubuntu base. Use `make integration-debug` to drop into a shell on failure.
