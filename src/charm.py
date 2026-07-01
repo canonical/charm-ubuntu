@@ -1,59 +1,53 @@
 #!/usr/bin/env python3
 
+"""Ubuntu machine charm.
+
+Deploys a pristine Ubuntu cloud/server image and optionally sets the hostname.
+"""
+
 import logging
-from pathlib import Path
-from subprocess import check_call, check_output
+import pathlib
+import subprocess
 
-from ops.charm import CharmBase
-from ops.main import main
-from ops.model import ActiveStatus
+import ops
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
-class UbuntuCharm(CharmBase):
-    def __init__(self, *args):
-        """Initialize charm.
+class UbuntuCharm(ops.CharmBase):
+    """Charm that deploys a pristine Ubuntu cloud/server image."""
 
-        Setup hook event observers and any other basic initialization.
-        """
-        super().__init__(*args)
+    def __init__(self, framework: ops.Framework):
+        """Initialise the charm and register event observers."""
+        super().__init__(framework)
 
-        for event in (
-            self.on.install,
-            self.on.leader_elected,
-            self.on.upgrade_charm,
-            self.on.post_series_upgrade,
-        ):
-            self.framework.observe(event, self._set_version)
-        self.framework.observe(self.on.config_changed, self._update_hostname)
+        framework.observe(self.on.install, self._set_version)
+        framework.observe(self.on.leader_elected, self._set_version)
+        framework.observe(self.on.upgrade_charm, self._set_version)
+        framework.observe(self.on.config_changed, self._update_hostname)
 
-    def _set_version(self, _):
-        """Set application version.
-
-        Invoked for relevant hook events and, on the leader unit, determine and
-        set the application-level workload version to the Ubuntu version upon
-        which the charm is running.
-        """
-        self.unit.status = ActiveStatus("ready")
+    def _set_version(self, event: ops.EventBase) -> None:
+        """Set application version to the Ubuntu release on the leader unit."""
+        self.unit.status = ops.ActiveStatus()
         if not self.unit.is_leader():
             return
         try:
-            output = check_output(["lsb_release", "-r", "-s"])
+            output = subprocess.check_output(["lsb_release", "-r", "-s"])  # noqa: S607
             version = output.decode("utf8").strip()
             self.unit.set_workload_version(version)
         except Exception:
-            log.exception("Error getting release")
+            logger.exception("Error getting release")
 
-    def _update_hostname(self, event):
+    def _update_hostname(self, event: ops.ConfigChangedEvent) -> None:
         """Update the machine hostname based on the config option."""
-        hostname = self.config["hostname"]
-        if not hostname:
+        hostname = self.config.get("hostname")
+        if not hostname or not isinstance(hostname, str):
             return
 
-        Path("/etc/hostname").write_text(hostname)
-        check_call(["hostname", hostname])
+        pathlib.Path("/etc/hostname").write_text(hostname)
+        subprocess.check_call(["hostname", hostname])  # noqa: S603, S607
+        self.unit.status = ops.ActiveStatus()
 
 
 if __name__ == "__main__":
-    main(UbuntuCharm)
+    ops.main(UbuntuCharm)

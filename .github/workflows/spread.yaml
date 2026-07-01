@@ -1,0 +1,32 @@
+name: Spread Integration Tests
+on: [pull_request]
+
+permissions: {}
+
+jobs:
+  spread:
+    name: Spread integration test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Set up runner
+        run: |
+          sudo snap install --classic concierge
+          sudo snap install --classic charmcraft
+          sudo concierge prepare --trace -p machine
+
+      - name: Build charm
+        run: charmcraft pack
+
+      - name: Run spread
+        env:
+          CI: "true"
+        run: charmcraft.spread -v lxd:ubuntu-26.04
+
+      - name: Tear down on failure
+        if: failure()
+        run: sudo concierge restore --trace

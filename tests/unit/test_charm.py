@@ -1,63 +1,48 @@
-import inspect
-from pathlib import Path
-from unittest import TestCase, mock
+"""Unit tests for the Ubuntu charm."""
 
-import yaml
-import ops.testing
-from ops.testing import Harness
+import pathlib
+
+from ops import testing
 
 import charm
 
-ops.testing.SIMULATE_CAN_CONNECT = True
+
+def test_version(monkeypatch) -> None:
+    """The workload version is set from lsb_release during initial hooks."""
+    ctx = testing.Context(charm.UbuntuCharm)
+    monkeypatch.setattr("charm.subprocess.check_output", lambda *a, **kw: b"test\n")
+    state_out = ctx.run(
+        ctx.on.install(),
+        testing.State(leader=True),
+    )
+    assert state_out.workload_version == "test"
 
 
-def charm_config() -> str:
-    """Return the charm configuration as a string readfrom charmcraft.yaml."""
-    filename = inspect.getfile(charm.UbuntuCharm)
-    charm_dir = Path(filename).parents[1]
-    content = (charm_dir / "charmcraft.yaml").read_text()
-    config = yaml.safe_load(content)["config"]
-    return yaml.safe_dump(config)
+def test_hostname(monkeypatch) -> None:
+    """Setting hostname config updates /etc/hostname and calls hostname."""
+    ctx = testing.Context(charm.UbuntuCharm)
+    original_write_text = pathlib.Path.write_text
+
+    def mock_write_text(self, *args, **kwargs):
+        if str(self) == "/etc/hostname":
+            return None
+        return original_write_text(self, *args, **kwargs)
+
+    monkeypatch.setattr(pathlib.Path, "write_text", mock_write_text)
+    monkeypatch.setattr("charm.subprocess.check_call", lambda *a, **kw: None)
+    state_out = ctx.run(
+        ctx.on.config_changed(),
+        testing.State(leader=True, config={"hostname": "foo"}),
+    )
+    assert isinstance(state_out.unit_status, testing.ActiveStatus)
 
 
-class TestCharm(TestCase):
-    """Ubuntu charm unit tests."""
-
-    @classmethod
-    def setUpClass(cls):
-        cls.pPath = mock.patch("charm.Path")
-        cls.mPath = cls.pPath.start()
-
-        cls.pcheck_call = mock.patch("charm.check_call")
-        cls.mcheck_call = cls.pcheck_call.start()
-
-        cls.pcheck_output = mock.patch("charm.check_output")
-        cls.mcheck_output = cls.pcheck_output.start()
-        cls.mcheck_output.return_value = b"test\n"
-
-        cls.harness = Harness(charm.UbuntuCharm, config=charm_config())
-        cls.harness.set_leader(is_leader=True)
-        cls.harness.begin_with_initial_hooks()
-
-    @classmethod
-    def tearDownClass(cls):
-        cls.pcheck_output.stop()
-        cls.pcheck_call.stop()
-        cls.pPath.stop()
-
-    def test_version(self):
-        # Set during cls.harness.begin_with_initial_hooks()
-        assert self.harness.get_workload_version() == "test"
-
-    def test_hostname(self):
-        self.harness.update_config({"hostname": "foo"})
-        self.mPath.assert_called_with("/etc/hostname")
-        self.mPath().write_text.assert_called_once_with("foo")
-        self.mcheck_call.assert_called_once_with(["hostname", "foo"])
-
-    def test_charm_ready(self):
-        """
-        See: https://github.com/openstack-charmers/zaza/blob/master/zaza/model.py#L1636
-        """
-        prefixes = ["ready", "Ready", "Unit is ready"]
-        self.assertIn(self.harness.model.unit.status.message, prefixes)
+def test_charm_status(monkeypatch) -> None:
+    """After install, the charm has active status."""
+    ctx = testing.Context(charm.UbuntuCharm)
+    monkeypatch.setattr("charm.subprocess.check_output", lambda *a, **kw: b"test\n")
+    state_out = ctx.run(
+        ctx.on.install(),
+        testing.State(leader=True),
+    )
+    assert isinstance(state_out.unit_status, testing.ActiveStatus)

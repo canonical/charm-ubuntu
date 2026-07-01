@@ -1,0 +1,55 @@
+[project]
+name = "charm-ubuntu"
+version = "0.0.0"           # Charm version is managed by Charmhub
+requires-python = ">=3.10"
+dependencies = ["ops~=3.8"]
+
+[dependency-groups]
+lint = ["ruff", "pyright", "zizmor"]
+unit = ["pytest", "ops[testing]~=3.8"]
+integration = ["pytest", "pytest-jubilant", "jubilant"]
+
+[tool.ruff]
+line-length = 99
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "C",   # mccabe
+  "N",   # pep8-naming
+  "D",   # pydocstyle
+  "I",   # isort
+  "S",   # flake8-bandit
+  "SIM", # flake8-simplify
+  "TCH", # flake8-type-checking
+  "RUF", # ruff-specific rules
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = [
+  "error",
+  # opentelemetry (transitive via ops) uses the deprecated importlib.metadata
+  # SelectableGroups interface on Python 3.10. Harmless; drop once Python 3.10
+  # is no longer supported or opentelemetry releases a fix.
+  "ignore:SelectableGroups dict interface is deprecated:DeprecationWarning",
+  # ops[testing] leaks an unclosed charmcraft.yaml file handle on Python 3.14.
+  # Fixed on canonical/operator main; drop once the next ops release ships.
+  "ignore::pytest.PytestUnraisableExceptionWarning",
+]
+
+[tool.pyright]
+pythonVersion = "3.10"
+include = ["src", "tests"]
