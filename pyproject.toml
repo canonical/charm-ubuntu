@@ -9,6 +9,16 @@ lint = ["ruff", "pyright", "zizmor"]
 unit = ["pytest", "ops[testing]~=3.8"]
 integration = ["pytest", "pytest-jubilant", "jubilant"]
 
+[tool.uv]
+# Refuse to consider distributions published in the last 7 days, giving
+# every uv resolution path (manual `uv add`, `uv lock` regens, uvx
+# bootstraps, CI re-resolves) a rolling quarantine on fresh releases.
+# Complements the Dependabot cooldown (which only covers Dependabot-
+# authored PRs) so the whole project has consistent 7-day quarantine
+# coverage. Per uv docs, `exclude-newer` accepts friendly durations
+# like "7 days", "1 week", "30 days".
+exclude-newer = "7 days"
+
 [tool.ruff]
 line-length = 99
 target-version = "py310"
