@@ -23,7 +23,7 @@ jobs:
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
 
       - name: Run zizmor
-        run: uv run --group lint zizmor --format=sarif . > results.sarif
+        run: uv run --locked --group lint zizmor --format=sarif . > results.sarif
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
