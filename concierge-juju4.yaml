@@ -1,0 +1,10 @@
+juju:
+  channel: 4.0/stable
+  model-defaults:
+    test-mode: "true"
+    automatically-retry-hooks: "true"
+
+providers:
+  lxd:
+    enable: true
+    bootstrap: true

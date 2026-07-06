@@ -33,11 +33,23 @@ integration-suites:
       {% endfor %}
       BASE={{ env.get("BASE", "24.04") }}
     environment:
-      MODULE/base_2004: tests/integration/test_charm.py
-      MODULE/base_2204: tests/integration/test_charm.py
-      MODULE/base_2404: tests/integration/test_charm.py
-      MODULE/base_2604: tests/integration/test_charm.py
-      BASE/base_2004: "20.04"
-      BASE/base_2204: "22.04"
-      BASE/base_2404: "24.04"
-      BASE/base_2604: "26.04"
+      MODULE/base_2004_juju3: tests/integration/test_charm.py
+      MODULE/base_2204_juju3: tests/integration/test_charm.py
+      MODULE/base_2404_juju3: tests/integration/test_charm.py
+      MODULE/base_2604_juju3: tests/integration/test_charm.py
+      MODULE/base_2004_juju4: tests/integration/test_charm.py
+      MODULE/base_2204_juju4: tests/integration/test_charm.py
+      MODULE/base_2404_juju4: tests/integration/test_charm.py
+      MODULE/base_2604_juju4: tests/integration/test_charm.py
+      BASE/base_2004_juju3: "20.04"
+      BASE/base_2204_juju3: "22.04"
+      BASE/base_2404_juju3: "24.04"
+      BASE/base_2604_juju3: "26.04"
+      BASE/base_2004_juju4: "20.04"
+      BASE/base_2204_juju4: "22.04"
+      BASE/base_2404_juju4: "24.04"
+      BASE/base_2604_juju4: "26.04"
+      CONCIERGE/base_2004_juju4: concierge-juju4.yaml
+      CONCIERGE/base_2204_juju4: concierge-juju4.yaml
+      CONCIERGE/base_2404_juju4: concierge-juju4.yaml
+      CONCIERGE/base_2604_juju4: concierge-juju4.yaml
