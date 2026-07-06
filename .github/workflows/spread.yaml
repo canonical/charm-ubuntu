@@ -36,12 +36,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        base: ["18.04", "20.04", "22.04", "24.04", "26.04"]
+        base: ["20.04", "22.04", "24.04", "26.04"]
         juju: ["3.6", "4.0"]
         exclude:
-          # juju 4 no longer supports these older bases.
-          - base: "18.04"
-            juju: "4.0"
+          # juju 4 no longer supports 20.04.
           - base: "20.04"
             juju: "4.0"
     steps:
