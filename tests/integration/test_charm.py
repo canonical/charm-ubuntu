@@ -1,29 +1,23 @@
-import logging
-from pathlib import Path
+"""Integration tests for the Ubuntu charm."""
 
+import pathlib
+
+import jubilant
 import pytest
-import yaml
-from juju.utils import ALL_SERIES_VERSIONS
-
-log = logging.getLogger(__name__)
-meta = yaml.safe_load(Path("charmcraft.yaml").read_text())
-CHANNEL_TO_SERIES = dict(reversed(mapping) for mapping in ALL_SERIES_VERSIONS.items())
-CHARM_SUPPORT = {
-    CHANNEL_TO_SERIES[base["channel"]]: base["channel"]
-    for base in meta["bases"][0]["run-on"]
-}
 
 
-@pytest.mark.abort_on_fail
-async def test_build_and_deploy(ops_test):
-    charm = await ops_test.build_charm(".")
-    for series in CHARM_SUPPORT:
-        await ops_test.model.deploy(charm, application_name=series, series=series)
-    await ops_test.model.wait_for_idle(wait_for_active=True, timeout=60 * 60)
+@pytest.mark.juju_setup
+def test_build_and_deploy(charm: pathlib.Path, juju: jubilant.Juju, base: str | None) -> None:
+    """Deploy the charm and verify it goes to active status."""
+    kwargs = {}
+    if base:
+        kwargs["base"] = f"ubuntu@{base}"
+    juju.deploy(charm, "ubuntu", **kwargs)
+    juju.wait(jubilant.all_active, timeout=60 * 60)
 
 
-async def test_app_versions(ops_test):
-    """Validate that the app versions are correct."""
-    for series, expected in CHARM_SUPPORT.items():
-        app = ops_test.model.applications[series]
-        assert app.workload_version == expected
+def test_app_versions(charm: pathlib.Path, juju: jubilant.Juju) -> None:
+    """Validate that the app version is set correctly."""
+    status = juju.wait(jubilant.all_active)
+    app = status.apps["ubuntu"]
+    assert app.version is not None

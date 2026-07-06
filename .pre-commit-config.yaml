@@ -1,0 +1,37 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-json
+      - id: check-yaml
+      - id: check-toml
+      - id: mixed-line-ending
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: detect-private-key
+  - repo: local
+    hooks:
+      - id: ruff
+        name: ruff (uv)
+        entry: uv run --group lint ruff check --fix
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: ruff-format
+        name: ruff-format (uv)
+        entry: uv run --group lint ruff format
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: zizmor
+        name: zizmor (uv)
+        entry: uv run --group lint zizmor
+        language: system
+        files: '^\.github/workflows/.*\.ya?ml$'

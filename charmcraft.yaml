@@ -4,11 +4,11 @@ summary: A pristine Ubuntu Server
 description: |
   This simply deploys the Ubuntu Cloud/Server image
 links:
-  contact: Charmers <juju@lists.ubuntu.com>
+  contact: https://matrix.to/#/#charmhub-charmdev:ubuntu.com
   issues:
-  - https://github.com/canonical/charm-ubuntu/issues
+    - https://github.com/canonical/charm-ubuntu/issues
   source:
-  - https://github.com/canonical/charm-ubuntu
+    - https://github.com/canonical/charm-ubuntu
 
 config:
   options:
@@ -33,28 +33,28 @@ storage:
       range: 0-1
 
 type: charm
-bases:
-  - build-on:
-    - name: "ubuntu"
-      channel: "20.04"
-      architectures: [amd64]
-    run-on:
-    - name: "ubuntu"
-      channel: "18.04"
-      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
-    - name: "ubuntu"
-      channel: "20.04"
-      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
-    - name: "ubuntu"
-      channel: "22.04"
-      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
-    - name: "ubuntu"
-      channel: "24.04"
-      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
-    - name: "ubuntu"
-      channel: "26.04"
-      architectures: [amd64, arm, arm64, i386, ppc64, s390x, ppc64el]
+platforms:
+  ubuntu@22.04:amd64:
+  ubuntu@22.04:arm64:
+  ubuntu@22.04:s390x:
+  ubuntu@22.04:ppc64el:
+  ubuntu@24.04:amd64:
+  ubuntu@24.04:arm64:
+  ubuntu@24.04:s390x:
+  ubuntu@24.04:ppc64el:
+  ubuntu@26.04:amd64:
+  ubuntu@26.04:arm64:
+  ubuntu@26.04:s390x:
+  ubuntu@26.04:ppc64el:
 
 parts:
   charm:
-    plugin: charm
+    plugin: uv
+    source: .
+    build-snaps:
+      - astral-uv
+  icon:
+    plugin: dump
+    source: .
+    stage:
+      - icon.svg
