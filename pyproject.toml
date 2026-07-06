@@ -1,0 +1,73 @@
+[project]
+name = "charm-ubuntu"
+version = "0.0.0"           # Charm version is managed by Charmhub
+requires-python = ">=3.10"
+dependencies = ["ops~=3.7"]
+
+[dependency-groups]
+lint = ["ruff", "pyright", "zizmor"]
+unit = ["pytest", "ops[testing]~=3.7"]
+integration = ["pytest", "pytest-jubilant", "jubilant"]
+
+[tool.uv]
+# Refuse to consider distributions published in the last 7 days, giving
+# every uv resolution path (manual `uv add`, `uv lock` regens, uvx
+# bootstraps, CI re-resolves) a rolling quarantine on fresh releases.
+# Complements the Dependabot cooldown (which only covers Dependabot-
+# authored PRs) so the whole project has consistent 7-day quarantine
+# coverage. Per uv docs, `exclude-newer` accepts friendly durations
+# like "7 days", "1 week", "30 days".
+exclude-newer = "7 days"
+
+# Refuse any source distribution — only install from wheels.
+# Rationale: `pip install <sdist>` / `uv sync` from an sdist runs the
+# source distribution's setup.py / PEP 517 build hooks, i.e. arbitrary
+# code execution at install time. Wheels don't run install scripts.
+# Per-package escape hatch if a future dep only ships sdist:
+# `no-build-package = ["that-one-pkg"]`.
+no-build = true
+
+[tool.ruff]
+line-length = 99
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "C",   # mccabe
+  "N",   # pep8-naming
+  "D",   # pydocstyle
+  "I",   # isort
+  "S",   # flake8-bandit
+  "SIM", # flake8-simplify
+  "TCH", # flake8-type-checking
+  "RUF", # ruff-specific rules
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = [
+  "error",
+  # opentelemetry (transitive via ops) uses the deprecated importlib.metadata
+  # SelectableGroups interface on Python 3.10. Harmless; drop once Python 3.10
+  # is no longer supported or opentelemetry releases a fix.
+  "ignore:SelectableGroups dict interface is deprecated:DeprecationWarning",
+  # ops[testing] leaks an unclosed charmcraft.yaml file handle on Python 3.14.
+  # Fixed on canonical/operator main; drop once the next ops release ships.
+  "ignore::pytest.PytestUnraisableExceptionWarning",
+]
+
+[tool.pyright]
+pythonVersion = "3.10"
+include = ["src", "tests"]

@@ -1,8 +1,32 @@
-.tox/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
 build/
-*.charm
-.coverage
-.report
+.eggs/
 
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Testing and coverage
+.coverage
+.report/
+htmlcov/
+.pytest_cache/
+
+# Charm build artifacts
+*.charm
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store

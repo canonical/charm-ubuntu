@@ -1,63 +1,86 @@
-import inspect
-from pathlib import Path
-from unittest import TestCase, mock
+"""Unit tests for the Ubuntu charm."""
 
-import yaml
-import ops.testing
-from ops.testing import Harness
+from ops import testing
 
 import charm
 
-ops.testing.SIMULATE_CAN_CONNECT = True
+
+def _patch_hostname_fs(monkeypatch, tmp_path, initial_hostname: str = "original-host"):
+    """Redirect the charm's hostname paths at a tmp filesystem seeded with initial_hostname."""
+    etc_hostname = tmp_path / "etc-hostname"
+    etc_hostname.write_text(f"{initial_hostname}\n")
+    original_snapshot = tmp_path / "original-hostname"
+    monkeypatch.setattr(charm, "HOSTNAME_PATH", etc_hostname)
+    monkeypatch.setattr(charm, "ORIGINAL_HOSTNAME_PATH", original_snapshot)
+    calls: list[list[str]] = []
+
+    def record(cmd, *a, **kw):
+        calls.append(cmd)
+
+    monkeypatch.setattr("charm.subprocess.check_call", record)
+    return etc_hostname, original_snapshot, calls
 
 
-def charm_config() -> str:
-    """Return the charm configuration as a string readfrom charmcraft.yaml."""
-    filename = inspect.getfile(charm.UbuntuCharm)
-    charm_dir = Path(filename).parents[1]
-    content = (charm_dir / "charmcraft.yaml").read_text()
-    config = yaml.safe_load(content)["config"]
-    return yaml.safe_dump(config)
+def test_version(monkeypatch) -> None:
+    """The workload version is set from lsb_release during initial hooks."""
+    ctx = testing.Context(charm.UbuntuCharm)
+    monkeypatch.setattr("charm.subprocess.check_output", lambda *a, **kw: b"test\n")
+    state_out = ctx.run(
+        ctx.on.install(),
+        testing.State(leader=True),
+    )
+    assert state_out.workload_version == "test"
 
 
-class TestCharm(TestCase):
-    """Ubuntu charm unit tests."""
+def test_hostname(monkeypatch, tmp_path) -> None:
+    """Setting hostname config updates /etc/hostname and snapshots the original."""
+    etc_hostname, original_snapshot, calls = _patch_hostname_fs(monkeypatch, tmp_path)
+    ctx = testing.Context(charm.UbuntuCharm)
+    state_out = ctx.run(
+        ctx.on.config_changed(),
+        testing.State(leader=True, config={"hostname": "foo"}),
+    )
+    assert etc_hostname.read_text() == "foo"
+    assert original_snapshot.read_text() == "original-host"
+    assert calls == [["hostname", "foo"]]
+    assert isinstance(state_out.unit_status, testing.UnknownStatus)
 
-    @classmethod
-    def setUpClass(cls):
-        cls.pPath = mock.patch("charm.Path")
-        cls.mPath = cls.pPath.start()
 
-        cls.pcheck_call = mock.patch("charm.check_call")
-        cls.mcheck_call = cls.pcheck_call.start()
+def test_hostname_reset_restores_original(monkeypatch, tmp_path) -> None:
+    """Clearing the hostname config restores the pre-charm hostname."""
+    etc_hostname, original_snapshot, calls = _patch_hostname_fs(monkeypatch, tmp_path)
+    original_snapshot.parent.mkdir(parents=True, exist_ok=True)
+    original_snapshot.write_text("original-host")
+    etc_hostname.write_text("foo\n")
 
-        cls.pcheck_output = mock.patch("charm.check_output")
-        cls.mcheck_output = cls.pcheck_output.start()
-        cls.mcheck_output.return_value = b"test\n"
+    ctx = testing.Context(charm.UbuntuCharm)
+    ctx.run(
+        ctx.on.config_changed(),
+        testing.State(leader=True, config={"hostname": ""}),
+    )
+    assert etc_hostname.read_text() == "original-host"
+    assert calls == [["hostname", "original-host"]]
 
-        cls.harness = Harness(charm.UbuntuCharm, config=charm_config())
-        cls.harness.set_leader(is_leader=True)
-        cls.harness.begin_with_initial_hooks()
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.pcheck_output.stop()
-        cls.pcheck_call.stop()
-        cls.pPath.stop()
+def test_hostname_reset_without_snapshot_is_noop(monkeypatch, tmp_path) -> None:
+    """Clearing the hostname config with no snapshot present is a no-op."""
+    etc_hostname, original_snapshot, calls = _patch_hostname_fs(monkeypatch, tmp_path)
+    ctx = testing.Context(charm.UbuntuCharm)
+    ctx.run(
+        ctx.on.config_changed(),
+        testing.State(leader=True, config={"hostname": ""}),
+    )
+    assert etc_hostname.read_text() == "original-host\n"
+    assert not original_snapshot.exists()
+    assert calls == []
 
-    def test_version(self):
-        # Set during cls.harness.begin_with_initial_hooks()
-        assert self.harness.get_workload_version() == "test"
 
-    def test_hostname(self):
-        self.harness.update_config({"hostname": "foo"})
-        self.mPath.assert_called_with("/etc/hostname")
-        self.mPath().write_text.assert_called_once_with("foo")
-        self.mcheck_call.assert_called_once_with(["hostname", "foo"])
-
-    def test_charm_ready(self):
-        """
-        See: https://github.com/openstack-charmers/zaza/blob/master/zaza/model.py#L1636
-        """
-        prefixes = ["ready", "Ready", "Unit is ready"]
-        self.assertIn(self.harness.model.unit.status.message, prefixes)
+def test_charm_status(monkeypatch) -> None:
+    """After install, the charm has active status."""
+    ctx = testing.Context(charm.UbuntuCharm)
+    monkeypatch.setattr("charm.subprocess.check_output", lambda *a, **kw: b"test\n")
+    state_out = ctx.run(
+        ctx.on.install(),
+        testing.State(leader=True),
+    )
+    assert isinstance(state_out.unit_status, testing.ActiveStatus)
