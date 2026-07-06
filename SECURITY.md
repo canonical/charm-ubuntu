@@ -114,11 +114,11 @@ for 5 years; interim releases receive security maintenance for 9 months.
 Once a given Ubuntu base reaches end-of-life, that base is no longer
 security-maintained in this project.
 
-The charm is distributed on [Charmhub](https://charmhub.io/ubuntu) using
-the standard per-Ubuntu-release track convention (one track per Ubuntu
-base, with `stable`/`candidate`/`edge` risk levels). There is no separate
-semantic version: the track conveys which Ubuntu base the charm targets,
-and revisions on a track are ordered chronologically.
+The charm is distributed on [Charmhub](https://charmhub.io/ubuntu) on a
+single `latest` track with `stable`/`candidate`/`edge` risk levels; the
+Ubuntu base targeted by a given deployment is selected at deploy time
+(for example with `--base`), not by picking a track. Revisions on the
+`latest` track are ordered chronologically.
 
 Security updates are delivered through two channels:
 
