@@ -1,26 +1,9 @@
 """Integration tests for the Ubuntu charm."""
 
-import os
 import pathlib
 
 import jubilant
 import pytest
-
-
-def pytest_addoption(parser: pytest.Parser) -> None:
-    """Add integration test options."""
-    parser.addoption(
-        "--base",
-        action="store",
-        default=None,
-        help="Ubuntu base to deploy (e.g. 22.04)",
-    )
-
-
-@pytest.fixture(scope="session")
-def base(request: pytest.FixtureRequest) -> str | None:
-    """Return the Ubuntu base to deploy on (e.g. '22.04'), or None for default."""
-    return request.config.getoption("--base") or os.environ.get("BASE")
 
 
 @pytest.mark.juju_setup

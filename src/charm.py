@@ -13,6 +13,9 @@ import ops
 
 logger = logging.getLogger(__name__)
 
+HOSTNAME_PATH = pathlib.Path("/etc/hostname")
+ORIGINAL_HOSTNAME_PATH = pathlib.Path("/var/lib/charm-ubuntu/original-hostname")
+
 
 class UbuntuCharm(ops.CharmBase):
     """Charm that deploys a pristine Ubuntu cloud/server image."""
@@ -39,14 +42,30 @@ class UbuntuCharm(ops.CharmBase):
             logger.exception("Error getting release")
 
     def _update_hostname(self, event: ops.ConfigChangedEvent) -> None:
-        """Update the machine hostname based on the config option."""
-        hostname = self.config.get("hostname")
-        if not hostname or not isinstance(hostname, str):
+        """Update the machine hostname based on the config option.
+
+        Snapshots the pre-charm hostname on first use so that clearing the
+        config option restores it.
+        """
+        configured = self.config.get("hostname")
+        configured = configured if isinstance(configured, str) and configured else None
+
+        if configured is None and not ORIGINAL_HOSTNAME_PATH.exists():
             return
 
-        pathlib.Path("/etc/hostname").write_text(hostname)
-        subprocess.check_call(["hostname", hostname])  # noqa: S603, S607
-        self.unit.status = ops.ActiveStatus()
+        current = HOSTNAME_PATH.read_text().strip()
+        if configured is not None and not ORIGINAL_HOSTNAME_PATH.exists():
+            ORIGINAL_HOSTNAME_PATH.parent.mkdir(parents=True, exist_ok=True)
+            ORIGINAL_HOSTNAME_PATH.write_text(current)
+
+        if configured is not None:
+            target = configured
+        else:
+            target = ORIGINAL_HOSTNAME_PATH.read_text().strip()
+        if target == current:
+            return
+        HOSTNAME_PATH.write_text(target)
+        subprocess.check_call(["hostname", target])  # noqa: S603, S607
 
 
 if __name__ == "__main__":

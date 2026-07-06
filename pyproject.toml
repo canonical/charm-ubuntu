@@ -2,11 +2,11 @@
 name = "charm-ubuntu"
 version = "0.0.0"           # Charm version is managed by Charmhub
 requires-python = ">=3.10"
-dependencies = ["ops~=3.8"]
+dependencies = ["ops~=3.7"]
 
 [dependency-groups]
 lint = ["ruff", "pyright", "zizmor"]
-unit = ["pytest", "ops[testing]~=3.8"]
+unit = ["pytest", "ops[testing]~=3.7"]
 integration = ["pytest", "pytest-jubilant", "jubilant"]
 
 [tool.uv]
