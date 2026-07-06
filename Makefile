@@ -17,11 +17,11 @@ format:  ## Format and auto-fix with ruff
 unit:  ## Run unit tests
 	uv run --locked --group unit pytest --tb native --show-capture=no --log-cli-level=INFO -s tests/unit
 
-integration:  ## Run integration tests via spread
-	charmcraft.spread -v
+integration:  ## Run integration tests via opcli/spread
+	opcli spread run
 
-integration-debug:  ## Run integration tests via spread, dropping into a shell on failure
-	charmcraft.spread -v -debug
+integration-debug:  ## Run integration tests via opcli/spread, dropping into a shell on failure
+	opcli spread run -- -debug
 
 integration-execution:  ## Run the integration test pytest invocation directly (used inside the spread VM)
 	uv run --locked --group integration pytest --tb native --show-capture=no --log-cli-level=INFO -s --disable-warnings tests/integration $(ARGS)

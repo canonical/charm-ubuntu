@@ -1,0 +1,8 @@
+version: 1
+rocks: []
+snaps: []
+charms:
+  - name: ubuntu
+    charmcraft-yaml: charmcraft.yaml
+    platforms:
+      - arch: amd64
