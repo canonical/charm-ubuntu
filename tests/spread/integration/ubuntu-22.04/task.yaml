@@ -7,13 +7,19 @@ systems:
 execute: |
   pushd "$SPREAD_PATH"
 
-  args="--base=$BASE tests/integration/test_charm.py"
+  case "$BASE" in
+      18.04|20.04)
+          # Charm is no longer published for these bases; fetch the
+          # last-published revision from Charmhub for the compatibility check.
+          charm_path="$PWD/ubuntu-store-$BASE.charm"
+          juju download ubuntu --channel=stable --base="ubuntu@$BASE" --filepath="$charm_path"
+          ;;
+      *)
+          charm_path="$PWD/ubuntu_ubuntu@$BASE-amd64.charm"
+          ;;
+  esac
 
-  if [[ -f "$PWD"/ubuntu_*.charm ]]; then
-    charm_path="$(ls "$PWD"/ubuntu_*.charm | head -1)"
-    args="--charm-path=$charm_path $args"
-  fi
-
+  args="--charm-path=$charm_path --base=$BASE tests/integration/test_charm.py"
   make integration-execution ARGS="$args"
 
 restore: |
