@@ -5,6 +5,8 @@ on:
     branches:
       - master
 
+permissions: {}
+
 jobs:
   publish:
     uses: canonical/charm-ci/.github/workflows/publish-artifacts.yml@7e08ea41eadd61b4bc14ce408c660699deed6567  # v0.0.1-alpha.6
@@ -14,5 +16,9 @@ jobs:
     with:
       channel: latest/edge
       integration-workflow-name: integration-test.yaml
+    # CHARMCRAFT_AUTH must be a repository secret. GitHub Actions forbids
+    # `environment:` on jobs that call a reusable workflow, so scoping the
+    # CharmHub credential to a GitHub environment isn't possible until
+    # canonical/charm-ci's publish-artifacts.yml accepts an environment input.
     secrets:
-      CHARMHUB_TOKEN: ${{ secrets.CHARMHUB_TOKEN }}
+      CHARMHUB_TOKEN: ${{ secrets.CHARMCRAFT_AUTH }}
