@@ -11,16 +11,16 @@ execute: |
       18.04|20.04)
           # Charm is no longer published for these bases; fetch the
           # last-published revision from Charmhub for the compatibility check.
-          charm_path="$PWD/ubuntu-store-$BASE.charm"
-          juju download ubuntu --channel=stable --base="ubuntu@$BASE" --filepath="$charm_path"
+          CHARM_PATH="$PWD/ubuntu-store-$BASE.charm"
+          juju download ubuntu --channel=stable --base="ubuntu@$BASE" --filepath="$CHARM_PATH"
           ;;
       *)
-          charm_path="$PWD/ubuntu_ubuntu@$BASE-amd64.charm"
+          CHARM_PATH="$PWD/ubuntu_ubuntu@$BASE-amd64.charm"
           ;;
   esac
 
-  args="--charm-path=$charm_path --base=$BASE tests/integration/test_charm.py"
-  make integration-execution ARGS="$args"
+  export CHARM_PATH
+  make integration-execution ARGS="--base=$BASE tests/integration/test_charm.py"
 
 restore: |
   if [[ -z "${CI:-}" ]]; then
