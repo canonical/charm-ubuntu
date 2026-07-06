@@ -1,0 +1,29 @@
+summary: Deploy charm on Ubuntu 26.04 (Resolute)
+environment:
+  BASE: "26.04"
+systems:
+  - ubuntu-24.04
+
+execute: |
+  pushd "$SPREAD_PATH"
+
+  case "$BASE" in
+      18.04|20.04)
+          # Charm is no longer published for these bases; fetch the
+          # last-published revision from Charmhub for the compatibility check.
+          CHARM_PATH="$PWD/ubuntu-store-$BASE.charm"
+          juju download ubuntu --channel=stable --base="ubuntu@$BASE" --filepath="$CHARM_PATH"
+          ;;
+      *)
+          CHARM_PATH="$PWD/ubuntu_ubuntu@$BASE-amd64.charm"
+          ;;
+  esac
+
+  export CHARM_PATH
+  make integration-execution ARGS="--base=$BASE tests/integration/test_charm.py"
+
+restore: |
+  if [[ -z "${CI:-}" ]]; then
+    juju destroy-model --no-prompt --destroy-storage testing
+    juju add-model testing
+  fi
