@@ -21,7 +21,7 @@ jobs:
       - name: Set up runner
         run: |
           sudo snap install --classic concierge
-          sudo concierge prepare --trace -p machine
+          sudo concierge prepare --trace -p crafts
 
       - name: Pack charm
         run: |
