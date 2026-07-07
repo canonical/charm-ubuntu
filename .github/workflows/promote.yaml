@@ -1,0 +1,86 @@
+name: Promote charm
+
+on:
+  workflow_dispatch:
+    inputs:
+      from-channel:
+        description: Source channel risk to promote from
+        type: choice
+        required: true
+        default: edge
+        options:
+          - edge
+          - beta
+          - candidate
+      to-channel:
+        description: Target channel risk to promote to
+        type: choice
+        required: true
+        default: beta
+        options:
+          - beta
+          - candidate
+          - stable
+      track:
+        description: Track to promote within
+        type: string
+        required: true
+        default: latest
+
+permissions: {}
+
+jobs:
+  promote:
+    name: Promote ${{ inputs.track }}/${{ inputs.from-channel }} to ${{ inputs.track }}/${{ inputs.to-channel }}
+    runs-on: ubuntu-latest
+    environment: charmhub-promote
+    steps:
+      - name: Check out code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7
+        with:
+          persist-credentials: false
+
+      - name: Install charmcraft
+        run: |
+          sudo snap install charmcraft --classic
+
+      - name: Promote revisions
+        env:
+          CHARMCRAFT_AUTH: ${{ secrets.CHARMCRAFT_AUTH }}
+          FROM_CHANNEL: ${{ inputs.from-channel }}
+          TO_CHANNEL: ${{ inputs.to-channel }}
+          TRACK: ${{ inputs.track }}
+        run: |
+          set -euo pipefail
+          charm_name=$(awk '/^name:/ {print $2; exit}' charmcraft.yaml)
+          charmcraft status "$charm_name" --format=json > status.json
+          python3 - <<'PY' > revisions.txt
+          import json, os, sys
+          with open("status.json") as f:
+              status = json.load(f)
+          track = os.environ["TRACK"]
+          risk = os.environ["FROM_CHANNEL"]
+          revisions = set()
+          for track_entry in status:
+              if track_entry.get("track") != track:
+                  continue
+              for mapping in track_entry.get("mappings", []):
+                  for channel in mapping.get("channels", []):
+                      if channel.get("risk") != risk:
+                          continue
+                      rev = channel.get("revision")
+                      if rev is not None:
+                          revisions.add(int(rev))
+          if not revisions:
+              print(f"No revisions found in {track}/{risk}", file=sys.stderr)
+              sys.exit(1)
+          for r in sorted(revisions):
+              print(r)
+          PY
+          echo "Revisions to promote:"
+          cat revisions.txt
+          while read -r revision; do
+            [ -z "$revision" ] && continue
+            echo "Releasing revision $revision to $TRACK/$TO_CHANNEL"
+            charmcraft release "$charm_name" --revision "$revision" --channel="$TRACK/$TO_CHANNEL"
+          done < revisions.txt

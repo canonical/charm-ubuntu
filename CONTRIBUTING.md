@@ -66,3 +66,34 @@ charmcraft.spread -v -debug -reuse lxd:ubuntu-26.04:tests/spread/integration/ubu
 ```
 
 If you already have a Juju controller and a machine cloud set up and want to skip the spread wrapper, `make integration-execution` runs the pytest invocation directly (this is the same target the spread VM uses internally).
+
+# Publishing
+
+Every merge to `master` is packed and released to `latest/edge` by the [Publish to edge](.github/workflows/publish-edge.yaml) workflow. Promotion to `beta`, `candidate`, or `stable` is done manually via the [Promote charm](.github/workflows/promote.yaml) workflow (Actions → Promote charm → Run workflow), which is gated by a required-reviewer approval on the `charmhub-promote` environment.
+
+Both workflows authenticate to Charmhub using a `CHARMCRAFT_AUTH` secret configured on the `charmhub-edge` and `charmhub-promote` environments in this repo's settings.
+
+## Regenerating the `CHARMCRAFT_AUTH` secret
+
+The exported credentials have a time-to-live (we use one year). When they expire, or if they are ever exposed, generate a new one:
+
+1. On a machine with `charmcraft` installed and an account that has publisher rights on the `ubuntu` charm, run:
+
+   ```bash
+   charmcraft login \
+     --export=auth.txt \
+     --charm=ubuntu \
+     --permission=package-manage \
+     --permission=package-view \
+     --ttl=31536000
+   ```
+
+   `--ttl` is in seconds (`31536000` = one year).
+
+2. Copy the full contents of `auth.txt`.
+
+3. In GitHub, go to **Settings → Environments** and update the `CHARMCRAFT_AUTH` secret on both the `charmhub-edge` and `charmhub-promote` environments with the new value.
+
+4. Delete the local `auth.txt` (`shred -u auth.txt`) — the credentials are not encrypted.
+
+5. Once the new secret is in place, revoke the previous credentials with `charmcraft logout` on the machine you used to create them (or via Charmhub's session management if you no longer have the token).
