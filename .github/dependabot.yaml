@@ -1,0 +1,101 @@
+# Canonical Dependabot template for canonical/charm-ubuntu.
+#
+# Rolled out per the OP0xx Dependabot conventions spec
+# (canonical/charm-tech#17). Per-repo deltas from the canonical template:
+#
+#   * `uv` ecosystem (charm-ubuntu migrated off pip; `uv.lock` is
+#     committed).
+#   * No `docs` group — no sphinx toolchain in this repo.
+#   * `dev-tooling` includes `zizmor` (workflow-static-check tool; sibling
+#     of ruff/pyright) and `pip-audit` (dependency vulnerability scanner
+#     run as a dev/CI tool, not shipped as a runtime dep).
+#   * `.yaml` file extension — repo already uses `.yaml` consistently in
+#     `.github/workflows/*`; in-repo consistency wins over the legacy
+#     `dependabot.yml` filename.
+
+version: 2
+
+updates:
+  # ===================================================================
+  # GitHub Actions — routine lane (monthly, single grouped PR)
+  # ===================================================================
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  # ===================================================================
+  # Python (uv) — routine lane (monthly, grouped along three seams)
+  # ===================================================================
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+    cooldown:
+      default-days: 7
+      semver-major-days: 14
+    groups:
+      # Linters / type-checkers / formatters / workflow-static-check /
+      # dependency-vulnerability scanner. Majors ride along — we do not
+      # pin these and a major is low-risk to review in a batch.
+      dev-tooling:
+        patterns:
+          - "ruff"
+          - "pyright"
+          - "ty"
+          - "codespell"
+          - "coverage"
+          - "pre-commit"
+          - "types-*"
+          - "zizmor"
+          - "pip-audit"
+      # Test runner + the jubilant test stack.
+      test-deps:
+        patterns:
+          - "pytest"
+          - "pytest-*"
+          - "jubilant"
+          - "ops-scenario"
+      # Everything else, minor + patch only. A runtime MAJOR falls through
+      # to its own ungrouped PR so it never silently rides a patch bundle.
+      runtime:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # ===================================================================
+  # Python (uv) — security-only lane (daily, ungrouped)
+  #
+  # open-pull-requests-limit: 0  ⇒  no version-update PRs from this entry;
+  # security-update PRs (which ignore the limit) still flow, daily. This is
+  # the pebble/charmlibs two-lane pattern. NO cooldown here on purpose — a
+  # security feed must not be delayed.
+  # ===================================================================
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 0
+    commit-message:
+      prefix: "chore"
+    labels:
+      - "dependencies"
