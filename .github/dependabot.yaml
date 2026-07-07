@@ -5,9 +5,7 @@
 version: 2
 
 updates:
-  # ===================================================================
   # GitHub Actions: routine lane (monthly, single grouped PR)
-  # ===================================================================
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -24,9 +22,7 @@ updates:
         patterns:
           - "*"
 
-  # ===================================================================
   # Python (uv): routine lane (monthly, grouped along three seams)
-  # ===================================================================
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
