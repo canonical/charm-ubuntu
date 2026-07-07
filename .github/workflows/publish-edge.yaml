@@ -18,9 +18,10 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install charmcraft
+      - name: Set up runner
         run: |
-          sudo snap install charmcraft --classic
+          sudo snap install --classic concierge
+          sudo concierge prepare --trace -p machine
 
       - name: Pack charm
         run: |
