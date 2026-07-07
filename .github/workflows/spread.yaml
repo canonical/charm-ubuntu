@@ -16,7 +16,6 @@ jobs:
       - name: Set up runner
         run: |
           sudo snap install --classic concierge
-          sudo snap install --classic charmcraft
           sudo concierge prepare --trace -p machine
 
       - name: Build charm
@@ -56,7 +55,6 @@ jobs:
       - name: Set up runner
         run: |
           sudo snap install --classic concierge
-          sudo snap install --classic charmcraft
           sudo concierge prepare --trace -p machine
 
       - name: Run spread
