@@ -83,14 +83,12 @@ jobs:
             echo "No .charm files downloaded from pack jobs" >&2
             exit 1
           fi
-          revision_args=()
           for charm in "${artefacts[@]}"; do
             echo "::group::Uploading $charm"
             upload_json=$(charmcraft upload "$charm" --format=json)
             echo "$upload_json"
             revision=$(printf '%s' "$upload_json" | python3 -c 'import json,sys; print(json.load(sys.stdin)["revision"])')
             echo "Uploaded $charm as revision $revision"
-            revision_args+=(--revision "$revision")
+            charmcraft release "$charm_name" --revision "$revision" --channel=latest/edge
             echo "::endgroup::"
           done
-          charmcraft release "$charm_name" "${revision_args[@]}" --channel=latest/edge
