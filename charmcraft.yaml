@@ -48,11 +48,14 @@ platforms:
   ubuntu@26.04:ppc64el:
 
 parts:
+  uv-deps:
+    plugin: nil
+    build-snaps:
+      - astral-uv
   charm:
     plugin: uv
     source: .
-    build-snaps:
-      - astral-uv
+    after: [uv-deps]
   icon:
     plugin: dump
     source: .
