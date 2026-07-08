@@ -14,9 +14,9 @@ boundaries that follow:
 ```mermaid
 flowchart LR
     Juju["Juju agent"] -->|hook context| Charm["Ubuntu charm<br/>(charm process)"]
-    Charm -->|hostname, storage config| Base["Ubuntu base<br/>(kernel, apt, services)"]
+    Charm -->|hostname, storage config| Base["Ubuntu base<br/>(kernel, APT, services)"]
     Base -->|optional| Net["Network"]
-    Charm -.->|`juju-log`| Juju
+    Charm --->|logs| Juju
 ```
 
 More detail:
@@ -38,12 +38,10 @@ The Ubuntu charm is intentionally minimal:
 - No long-running processes are started by the charm.
 - No secrets are generated, stored, or handled by the charm; Juju secrets
   are not used.
-- The charm relies on the Ubuntu base's security posture (`apt`/`snapd`
-  update channels, AppArmor profiles, `unattended-upgrades` when enabled)
-  rather than re-implementing any of it.
+- The charm relies on the Ubuntu base's security posture: `apt`/`snapd`
+  update channels, AppArmor profiles, `unattended-upgrades` when enabled.
 
-Operational risk reduction is therefore concentrated in the Ubuntu base
-selection: deploy with the most recent supported LTS where possible.
+The best way to reduce operational risk is to deploy with the most recent Ubuntu LTS release as the base.
 
 ## Cryptography
 
@@ -63,14 +61,14 @@ volumes the charm attaches.
 To harden a deployment of the Ubuntu charm, harden the Ubuntu base:
 
 - [Ubuntu server security
-  documentation](https://documentation.ubuntu.com/server/explanation/intro-to/security/)
+  documentation](https://ubuntu.com/server/docs/explanation/intro-to/security/)
   — kernel hardening, AppArmor, `auditd`, `ufw`.
 - [CIS benchmarks for
   Ubuntu](https://ubuntu.com/security/certifications/docs/disa-stig-cis) —
   CIS Level 1 / Level 2 hardening; Ubuntu Pro provides
   `ubuntu-security-guide` for automated application.
 - [Juju
-  hardening](https://documentation.ubuntu.com/juju/3.6/howto/manage-controllers/#harden-a-controller)
+  hardening](https://canonical.com/juju/docs/juju-cli/3.6/howto/manage-your-juju-deployment/harden-your-juju-deployment/#harden-the-controller-s)
   — controller-side hardening.
 
 The charm itself adds no further hardening surface; once the base and the
@@ -115,9 +113,9 @@ Once a given Ubuntu base reaches end-of-life, that base is no longer
 security-maintained in this project.
 
 The charm is distributed on [Charmhub](https://charmhub.io/ubuntu) on a
-single `latest` track with `stable`/`candidate`/`edge` risk levels; the
+single `latest` track with `stable`, `candidate`, and `edge` risk levels. The
 Ubuntu base targeted by a given deployment is selected at deploy time
-(for example with `--base`), not by picking a track. Revisions on the
+with `--base`, not by picking a track. Revisions on the
 `latest` track are ordered chronologically.
 
 Security updates are delivered through two channels:
@@ -143,14 +141,14 @@ project](https://github.com/canonical/charm-ubuntu/security/advisories/new).
 See [Privately reporting a security
 vulnerability](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability)
 for instructions on using the feature. You may also email
-`security@ubuntu.com`; to encrypt your email, follow [Canonical's
+`security@ubuntu.com`. To encrypt your email, follow [Canonical's
 reporting
 instructions](https://ubuntu.com/security/disclosure-policy#contact-us).
 
 Please include a description of the issue, the steps you took to find
 it, affected versions, and, if known, mitigations.
 
-The Ubuntu charm's GitHub admins will be notified and will work with you to
+The charm's maintainers will be notified and will work with you to
 determine whether the issue qualifies as a security issue and, if so, in
 which component. We then figure out a fix, get a CVE assigned, and
 coordinate the release of the fix. Our vulnerability management team
