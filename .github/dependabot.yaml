@@ -5,7 +5,7 @@
 version: 2
 
 updates:
-  # GitHub Actions: routine lane (monthly, single grouped PR)
+  # GitHub Actions: monthly, single grouped PR.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -22,7 +22,7 @@ updates:
         patterns:
           - "*"
 
-  # Python (uv): routine lane (monthly, grouped along three seams)
+  # Python (uv): monthly, grouped
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
@@ -36,7 +36,7 @@ updates:
       default-days: 7
       semver-major-days: 14
     groups:
-      # Charm Tech's own releases (lockstep-versioned; we trust the release).
+      # Charm Tech's own releases (trusted).
       charm-tech:
         patterns:
           - "ops"
