@@ -8,10 +8,17 @@ on:
 permissions: {}
 
 jobs:
-  publish:
-    name: Build and publish to edge
-    runs-on: ubuntu-latest
-    environment: charmhub-edge
+  pack:
+    name: Pack charm (${{ matrix.arch }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Check out code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7
@@ -31,9 +38,38 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
-          name: charmcraft-logs
+          name: charmcraft-logs-${{ matrix.arch }}
           path: /home/runner/.local/state/charmcraft/log/*.log
           if-no-files-found: warn
+
+      - name: Upload packed charms
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        with:
+          name: charms-${{ matrix.arch }}
+          path: "*.charm"
+          if-no-files-found: error
+
+  publish:
+    name: Release to edge
+    needs: pack
+    runs-on: ubuntu-latest
+    environment: charmhub-edge
+    steps:
+      - name: Check out code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7
+        with:
+          persist-credentials: false
+
+      - name: Install charmcraft
+        run: |
+          sudo snap install charmcraft --classic
+
+      - name: Download packed charms
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4
+        with:
+          path: charms
+          pattern: charms-*
+          merge-multiple: true
 
       - name: Upload and release to edge
         env:
@@ -42,17 +78,19 @@ jobs:
           set -euo pipefail
           charm_name=$(awk '/^name:/ {print $2; exit}' charmcraft.yaml)
           shopt -s nullglob
-          artefacts=(*.charm)
+          artefacts=(charms/*.charm)
           if [ ${#artefacts[@]} -eq 0 ]; then
-            echo "No .charm files produced by charmcraft pack" >&2
+            echo "No .charm files downloaded from pack jobs" >&2
             exit 1
           fi
+          revision_args=()
           for charm in "${artefacts[@]}"; do
             echo "::group::Uploading $charm"
             upload_json=$(charmcraft upload "$charm" --format=json)
             echo "$upload_json"
             revision=$(printf '%s' "$upload_json" | python3 -c 'import json,sys; print(json.load(sys.stdin)["revision"])')
             echo "Uploaded $charm as revision $revision"
-            charmcraft release "$charm_name" --revision "$revision" --channel=latest/edge
+            revision_args+=(--revision "$revision")
             echo "::endgroup::"
           done
+          charmcraft release "$charm_name" "${revision_args[@]}" --channel=latest/edge

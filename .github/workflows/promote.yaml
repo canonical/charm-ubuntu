@@ -80,8 +80,10 @@ jobs:
           PY
           echo "Revisions to promote:"
           cat revisions.txt
+          revision_args=()
           while read -r revision; do
             [ -z "$revision" ] && continue
-            echo "Releasing revision $revision to $TRACK/$TO_CHANNEL"
-            charmcraft release "$charm_name" --revision "$revision" --channel="$TRACK/$TO_CHANNEL"
+            revision_args+=(--revision "$revision")
           done < revisions.txt
+          echo "Releasing revisions to $TRACK/$TO_CHANNEL"
+          charmcraft release "$charm_name" "${revision_args[@]}" --channel="$TRACK/$TO_CHANNEL"
