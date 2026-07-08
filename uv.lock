@@ -85,7 +85,7 @@ lint = [
 ]
 security = [{ name = "pip-audit" }]
 unit = [
-    { name = "ops", extras = ["testing"], specifier = "~=3.7" },
+    { name = "ops", extras = ["testing"], specifier = "~=3.8" },
     { name = "pytest" },
 ]
 
