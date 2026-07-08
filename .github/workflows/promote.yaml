@@ -65,10 +65,11 @@ jobs:
               if track_entry.get("track") != track:
                   continue
               for mapping in track_entry.get("mappings", []):
-                  for channel in mapping.get("channels", []):
-                      if channel.get("risk") != risk:
+                  for release in mapping.get("releases", []):
+                      parts = release.get("channel", "").split("/", 2)
+                      if len(parts) < 2 or parts[0] != track or parts[1] != risk:
                           continue
-                      rev = channel.get("revision")
+                      rev = release.get("revision")
                       if rev is not None:
                           revisions.add(int(rev))
           if not revisions:

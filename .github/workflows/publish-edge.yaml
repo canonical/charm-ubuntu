@@ -18,13 +18,22 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install charmcraft
+      - name: Set up runner
         run: |
-          sudo snap install charmcraft --classic
+          sudo snap install --classic concierge
+          sudo concierge prepare --trace -c .github/concierge-pack.yaml
 
       - name: Pack charm
         run: |
           charmcraft pack --verbose
+
+      - name: Archive charmcraft logs
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        with:
+          name: charmcraft-logs
+          path: /home/runner/.local/state/charmcraft/log/*.log
+          if-no-files-found: warn
 
       - name: Upload and release to edge
         env:
