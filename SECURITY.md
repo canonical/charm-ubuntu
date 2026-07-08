@@ -63,14 +63,14 @@ To remove a deployment of the Ubuntu charm, run `juju remove-application ubuntu`
 
 The security support lifetime for a deployment of the Ubuntu charm mirrors the [Ubuntu release lifecycle](https://ubuntu.com/about/release-cycle) of the base being deployed. LTS releases receive standard security maintenance for 5 years; interim releases receive security maintenance for 9 months. Once a given Ubuntu base reaches end-of-life, that base is no longer security-maintained in this project.
 
-The charm is distributed on [Charmhub](https://charmhub.io/ubuntu) on a single `latest` track with `stable`, `candidate`, and `edge` risk levels. The Ubuntu base targeted by a given deployment is selected at deploy time with `--base`, not by picking a track. Revisions on the `latest` track are ordered chronologically.
+The charm is distributed on [Charmhub](https://charmhub.io/ubuntu) on a single `latest` track with `stable`, `candidate`, `beta`, and `edge` risk levels. The Ubuntu base targeted by a given deployment is selected at deploy time with `--base`, not by picking a track. Revisions on the `latest` track are ordered chronologically.
 
 Security updates are delivered through two channels:
 
 - **Ubuntu base updates** — `apt` from the Ubuntu archive on each unit; `unattended-upgrades` (if enabled by the operator) applies them automatically. This is the channel for kernel, library, and system package CVEs.
-- **Charm refreshes** — published to [Charmhub](https://charmhub.io/ubuntu); operators receive updates by running `juju refresh ubuntu`. Charm-level security fixes (to the charm code itself) are delivered this way.
+- **Charm refreshes** — published to Charmhub; operators receive updates by running `juju refresh ubuntu`. Charm-level security fixes (to the charm code itself) are delivered this way.
 
-To verify the deployed charm revision, run `juju status` and compare the `Charm rev` column for the `ubuntu` application against the revision listed on [Charmhub](https://charmhub.io/ubuntu).
+To verify the deployed charm revision, run `juju status` and compare the `Charm rev` column for the `ubuntu` application against the revision listed on Charmhub.
 
 ## Reporting a vulnerability
 
