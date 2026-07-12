@@ -27,16 +27,16 @@ jobs:
         # and keeps this isolated.
       - name: Generate coverage report
         run: |
-          pip install coverage pytest -r requirements.txt --break-system-packages
-          PYTHONPATH=src coverage run --source=src -m pytest tests/unit
-          mkdir -p .report
-          coverage xml -o .report/coverage.xml
+          uv run --locked --group unit --with coverage coverage run --source=src -m pytest tests/unit
+          mkdir .report
+          uv run --locked --group unit --with coverage coverage xml -o .report/coverage.xml
 
         # Note that these are dependencies for the tools that the TIOBE action will run,
         # which is done in the global environment, rather than a venv, as we do with the
         # unit tests.
       - name: Install TIOBE and project dependencies
         run: |
+          uv export --no-emit-project --frozen --no-hashes > requirements.txt
           pip install flake8 pylint -r requirements.txt --break-system-packages
 
       - name: TICS GitHub Action
