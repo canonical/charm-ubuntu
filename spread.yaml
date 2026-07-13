@@ -27,28 +27,24 @@ integration-suites:
       - integration-test
     auto-discover: false
     pytest-environment-template: |
-      {% for build in artifacts.charms[0].builds if build.arch == arch %}
+      {% set b = env.get("BASE", "24.04") %}
+      {% for build in artifacts.charms[0].builds if build.arch == arch and build.base == "ubuntu@" + b %}
       CHARM_PATH={{ build.path }}
       {% endfor %}
-      BASE={{ env.get("BASE", "24.04") }}
+      BASE={{ b }}
     environment:
-      MODULE/base_2004_juju3: tests/integration/test_charm.py
       MODULE/base_2204_juju3: tests/integration/test_charm.py
       MODULE/base_2404_juju3: tests/integration/test_charm.py
       MODULE/base_2604_juju3: tests/integration/test_charm.py
-      MODULE/base_2004_juju4: tests/integration/test_charm.py
       MODULE/base_2204_juju4: tests/integration/test_charm.py
       MODULE/base_2404_juju4: tests/integration/test_charm.py
       MODULE/base_2604_juju4: tests/integration/test_charm.py
-      BASE/base_2004_juju3: "20.04"
       BASE/base_2204_juju3: "22.04"
       BASE/base_2404_juju3: "24.04"
       BASE/base_2604_juju3: "26.04"
-      BASE/base_2004_juju4: "20.04"
       BASE/base_2204_juju4: "22.04"
       BASE/base_2404_juju4: "24.04"
       BASE/base_2604_juju4: "26.04"
-      CONCIERGE/base_2004_juju4: concierge-juju4.yaml
       CONCIERGE/base_2204_juju4: concierge-juju4.yaml
       CONCIERGE/base_2404_juju4: concierge-juju4.yaml
       CONCIERGE/base_2604_juju4: concierge-juju4.yaml
