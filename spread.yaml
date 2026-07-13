@@ -18,7 +18,6 @@ exclude:
   - .tox
   - .venv
   - .*_cache
-  - build
 
 integration-suites:
   tests/integration/:
