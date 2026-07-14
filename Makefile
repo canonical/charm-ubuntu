@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help lint format unit integration integration-debug integration-execution
+.PHONY: help lint format unit integration integration-debug
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -22,6 +22,3 @@ integration:  ## Run integration tests via opcli/spread
 
 integration-debug:  ## Run integration tests via opcli/spread, dropping into a shell on failure
 	opcli spread run -- -debug
-
-integration-execution:  ## Run the integration test pytest invocation directly (used inside the spread VM)
-	uv run --locked --group integration pytest --tb native --show-capture=no --log-cli-level=INFO -s --disable-warnings tests/integration $(ARGS)
