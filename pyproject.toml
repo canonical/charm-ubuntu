@@ -24,8 +24,10 @@ exclude-newer = "7 days"
 # Rationale: `pip install <sdist>` / `uv sync` from an sdist runs the
 # source distribution's setup.py / PEP 517 build hooks, i.e. arbitrary
 # code execution at install time. Wheels don't run install scripts.
-# Per-package escape hatch if a future dep only ships sdist:
-# `no-build-package = ["that-one-pkg"]`.
+# uv has no per-package opt-out: `no-build-package` is another block-list,
+# not an allow-list. If a dep only ships sdist, either drop `no-build`
+# globally or drop the arch that lacks a wheel (e.g. PyYAML has no
+# ppc64el wheel, so ppc64el is not a supported build platform here).
 no-build = true
 
 [tool.ruff]
