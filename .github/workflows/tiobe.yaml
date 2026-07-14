@@ -27,9 +27,9 @@ jobs:
         # and keeps this isolated.
       - name: Generate coverage report
         run: |
-          uv run --locked --group unit --with coverage coverage run --source=src -m pytest tests/unit
+          uv run --locked --group unit --group coverage coverage run --source=src -m pytest tests/unit
           mkdir .report
-          uv run --locked --group unit --with coverage coverage xml -o .report/coverage.xml
+          uv run --locked --group unit --group coverage coverage xml -o .report/coverage.xml
 
         # Note that these are dependencies for the tools that the TIOBE action will run,
         # which is done in the global environment, rather than a venv, as we do with the
