@@ -7,18 +7,7 @@ backends:
   integration-test:
     type: integration-test
     systems:
-      - ubuntu-24.04:
-          runner: [ubuntu-24.04]
-          arch: amd64
-      - ubuntu-24.04-arm64:
-          runner: [ubuntu-24.04-arm]
-          arch: arm64
-      - ubuntu-24.04-ppc64el:
-          runner: [self-hosted-linux-ppc64el-noble-edge]
-          arch: ppc64el
-      - ubuntu-24.04-s390x:
-          runner: [self-hosted-linux-s390x-noble-medium]
-          arch: s390x
+      - ubuntu-24.04
 
 environment:
   CONCIERGE: '$(HOST: echo "${CONCIERGE:-concierge.yaml}")'
