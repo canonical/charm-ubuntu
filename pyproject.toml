@@ -9,6 +9,14 @@ lint = ["ruff", "pyright", "zizmor"]
 security = ["pip-audit"]
 unit = ["pytest", "ops[testing]~=3.8"]
 integration = ["pytest", "pytest-jubilant", "jubilant"]
+# opcli drives multi-arch builds and the spread integration harness. Kept
+# on the same charm-ci tag the reusable workflows pin, so local
+# `uv run --group tooling opcli spread run` matches CI. opcli requires
+# Python >= 3.12, but the charm itself supports >= 3.10, so gate the dep.
+tooling = ["opcli[cli] ; python_version >= '3.12'"]
+
+[tool.uv.sources]
+opcli = { git = "https://github.com/canonical/charm-ci.git", tag = "v0.0.1-alpha.9" }
 
 [tool.uv]
 # Refuse to consider distributions published in the last 7 days, giving

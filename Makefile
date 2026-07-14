@@ -18,7 +18,7 @@ unit:  ## Run unit tests
 	uv run --locked --group unit pytest --tb native --show-capture=no --log-cli-level=INFO -s tests/unit
 
 integration:  ## Run integration tests via opcli/spread
-	opcli spread run
+	uv run --locked --group tooling opcli spread run
 
 integration-debug:  ## Run integration tests via opcli/spread, dropping into a shell on failure
-	opcli spread run -- -debug
+	uv run --locked --group tooling opcli spread run -- -debug
