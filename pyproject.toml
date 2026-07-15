@@ -8,6 +8,7 @@ dependencies = ["ops~=3.8"]
 lint = ["ruff", "pyright", "zizmor"]
 security = ["pip-audit"]
 unit = ["pytest", "ops[testing]~=3.8"]
+coverage = ["coverage"]
 integration = ["pytest", "pytest-jubilant", "jubilant", "opcli ; python_version >= '3.12'"]
 # opcli drives multi-arch builds and the spread integration harness. Kept
 # on the same charm-ci tag the reusable workflows pin, so local
