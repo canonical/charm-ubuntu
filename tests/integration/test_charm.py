@@ -16,8 +16,12 @@ def test_build_and_deploy(charm: pathlib.Path, juju: jubilant.Juju) -> None:
     print(f"[diag] platform.machine(): {platform.machine()}", flush=True)
     with zipfile.ZipFile(charm) as z:
         print(f"[diag] manifest.yaml:\n{z.read('manifest.yaml').decode()}", flush=True)
-    print("[diag] juju model constraints:", flush=True)
-    print(juju.cli("model-config", "--format=yaml"), flush=True)
+    print("[diag] juju model-defaults:", flush=True)
+    print(juju.cli("model-defaults", "--format=yaml", include_model=False), flush=True)
+    print("[diag] juju constraints (controller):", flush=True)
+    print(juju.cli("constraints", include_model=False), flush=True)
+    print("[diag] juju controller-config:", flush=True)
+    print(juju.cli("controller-config", "--format=yaml", include_model=False), flush=True)
     juju.deploy(charm, "ubuntu")
     juju.wait(jubilant.all_active, timeout=60 * 60)
 
