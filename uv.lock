@@ -7,7 +7,7 @@ resolution-markers = [
 ]
 
 [options]
-exclude-newer = "2026-07-07T04:09:29.084318Z"
+exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
 exclude-newer-span = "P7D"
 
 [[package]]
@@ -78,7 +78,6 @@ coverage = [
 ]
 integration = [
     { name = "jubilant" },
-    { name = "opcli", marker = "python_full_version >= '3.12'" },
     { name = "pytest" },
     { name = "pytest-jubilant" },
 ]
@@ -105,7 +104,6 @@ requires-dist = [{ name = "ops", specifier = "~=3.8" }]
 coverage = [{ name = "coverage" }]
 integration = [
     { name = "jubilant" },
-    { name = "opcli", marker = "python_full_version >= '3.12'", git = "https://github.com/canonical/charm-ci.git?tag=v0.0.1-alpha.9" },
     { name = "pytest" },
     { name = "pytest-jubilant" },
 ]
