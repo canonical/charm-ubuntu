@@ -23,10 +23,7 @@ def base(request: pytest.FixtureRequest) -> str | None:
 
 
 @pytest.fixture(scope="session")
-def charm() -> pathlib.Path:
+def charm(charm_paths: dict, base: str | None) -> pathlib.Path:
     """Return the path of the charm under test."""
-    charm_path = os.environ.get("CHARM_PATH")
-    if not charm_path:
-        charm_dir = pathlib.Path()
-        charm_path = next(charm_dir.glob("*.charm"))
-    return pathlib.Path(charm_path).resolve()
+    resolved_base = base or "24.04"
+    return pathlib.Path(charm_paths["ubuntu"][f"ubuntu@{resolved_base}"]).resolve()

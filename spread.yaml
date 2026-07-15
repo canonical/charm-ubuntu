@@ -26,12 +26,8 @@ integration-suites:
     backends:
       - integration-test
     auto-discover: false
-    pytest-environment-template: |
-      {% set b = env.get("BASE", "24.04") %}
-      {% for build in artifacts.charms[0].builds if build.arch == arch and build.base == "ubuntu@" + b %}
-      CHARM_PATH={{ build.path }}
-      {% endfor %}
-      BASE={{ b }}
+    pytest-arguments-template: |
+      --base {{ env.get("BASE", "24.04") }}
     environment:
       MODULE/base_2204_juju3: tests/integration/test_charm.py
       MODULE/base_2404_juju3: tests/integration/test_charm.py

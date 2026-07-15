@@ -75,6 +75,7 @@ dependencies = [
 [package.dev-dependencies]
 integration = [
     { name = "jubilant" },
+    { name = "opcli", marker = "python_full_version >= '3.12'" },
     { name = "pytest" },
     { name = "pytest-jubilant" },
 ]
@@ -100,6 +101,7 @@ requires-dist = [{ name = "ops", specifier = "~=3.8" }]
 [package.metadata.requires-dev]
 integration = [
     { name = "jubilant" },
+    { name = "opcli", marker = "python_full_version >= '3.12'", git = "https://github.com/canonical/charm-ci.git?tag=v0.0.1-alpha.9" },
     { name = "pytest" },
     { name = "pytest-jubilant" },
 ]
