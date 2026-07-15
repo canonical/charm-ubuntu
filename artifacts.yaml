@@ -8,5 +8,7 @@ charms:
       - arch: amd64
       - arch: arm64
         runner: [ubuntu-24.04-arm]
+      - arch: ppc64el
+        runner: [self-hosted-linux-ppc64el-noble-edge]
       - arch: s390x
         runner: [self-hosted-linux-s390x-noble-medium]

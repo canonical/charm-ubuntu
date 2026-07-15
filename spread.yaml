@@ -7,7 +7,30 @@ backends:
   integration-test:
     type: integration-test
     systems:
-      - ubuntu-24.04
+      - ubuntu-24.04:
+          runner: [ubuntu-24.04]
+          arch: amd64
+          cpu: 4
+          memory: 8
+          disk: 40
+      - ubuntu-24.04-arm64:
+          runner: [ubuntu-24.04-arm]
+          arch: arm64
+          cpu: 4
+          memory: 8
+          disk: 40
+      - ubuntu-24.04-ppc64el:
+          runner: [self-hosted-linux-ppc64el-noble-edge]
+          arch: ppc64el
+          cpu: 4
+          memory: 8
+          disk: 40
+      - ubuntu-24.04-s390x:
+          runner: [self-hosted-linux-s390x-noble-medium]
+          arch: s390x
+          cpu: 4
+          memory: 8
+          disk: 40
 
 environment:
   CONCIERGE: '$(HOST: echo "${CONCIERGE:-concierge.yaml}")'
