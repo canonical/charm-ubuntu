@@ -53,6 +53,11 @@ parts:
     source: .
     build-snaps:
       - astral-uv
+    build-environment:
+      # PyYAML has no ppc64el wheel; charmcraft's `uv sync` inherits the
+      # project-level [tool.uv] no-build and refuses the sdist. Override
+      # inside the charmcraft build container only.
+      - UV_NO_BUILD: "false"
   icon:
     plugin: dump
     source: .
