@@ -1,28 +1,19 @@
 """Integration tests for the Ubuntu charm."""
 
 import pathlib
+import platform
 
 import jubilant
 import pytest
+
+_ARCH_MAP = {"x86_64": "amd64", "aarch64": "arm64", "ppc64le": "ppc64el", "s390x": "s390x"}
 
 
 @pytest.mark.juju_setup
 def test_build_and_deploy(charm: pathlib.Path, juju: jubilant.Juju) -> None:
     """Deploy the charm and verify it goes to active status."""
-    import platform
-    import zipfile
-
-    print(f"[diag] charm path: {charm}", flush=True)
-    print(f"[diag] platform.machine(): {platform.machine()}", flush=True)
-    with zipfile.ZipFile(charm) as z:
-        print(f"[diag] manifest.yaml:\n{z.read('manifest.yaml').decode()}", flush=True)
-    print("[diag] juju model-defaults:", flush=True)
-    print(juju.cli("model-defaults", "--format=yaml", include_model=False), flush=True)
-    print("[diag] juju constraints (controller):", flush=True)
-    print(juju.cli("constraints", include_model=False), flush=True)
-    print("[diag] juju controller-config:", flush=True)
-    print(juju.cli("controller-config", "--format=yaml", include_model=False), flush=True)
-    juju.deploy(charm, "ubuntu")
+    arch = _ARCH_MAP.get(platform.machine(), platform.machine())
+    juju.deploy(charm, "ubuntu", constraints={"arch": arch})
     juju.wait(jubilant.all_active, timeout=60 * 60)
 
 
