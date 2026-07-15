@@ -29,17 +29,6 @@ opcli = { git = "https://github.com/canonical/charm-ci.git", tag = "v0.0.1-alpha
 # like "7 days", "1 week", "30 days".
 exclude-newer = "7 days"
 
-# Refuse any source distribution — only install from wheels.
-# Rationale: `pip install <sdist>` / `uv sync` from an sdist runs the
-# source distribution's setup.py / PEP 517 build hooks, i.e. arbitrary
-# code execution at install time. Wheels don't run install scripts.
-# uv has no per-package opt-out: `no-build-package` is another block-list,
-# not an allow-list, so this default applies globally. The integration
-# tox env sets UV_NO_BUILD=false to carve out an exception: opcli only
-# ships as a git source, and transitive deps like PyYAML need to build
-# from sdist on arches without wheels (e.g. ppc64el).
-no-build = true
-
 [tool.ruff]
 line-length = 99
 target-version = "py310"
