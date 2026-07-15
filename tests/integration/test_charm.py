@@ -7,12 +7,9 @@ import pytest
 
 
 @pytest.mark.juju_setup
-def test_build_and_deploy(charm: pathlib.Path, juju: jubilant.Juju, base: str | None) -> None:
+def test_build_and_deploy(charm: pathlib.Path, juju: jubilant.Juju) -> None:
     """Deploy the charm and verify it goes to active status."""
-    kwargs = {}
-    if base:
-        kwargs["base"] = f"ubuntu@{base}"
-    juju.deploy(charm, "ubuntu", **kwargs)
+    juju.deploy(charm, "ubuntu")
     juju.wait(jubilant.all_active, timeout=60 * 60)
 
 
