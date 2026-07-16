@@ -4,6 +4,7 @@ import os
 import pathlib
 
 import pytest
+from opcli.pytest_plugin import CharmPathList
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
@@ -23,7 +24,7 @@ def base(request: pytest.FixtureRequest) -> str | None:
 
 
 @pytest.fixture(scope="session")
-def charm(charm_paths: dict, base: str | None) -> pathlib.Path:
+def charm(charm_paths: dict[str, CharmPathList], base: str | None) -> pathlib.Path:
     """Return the path of the charm under test."""
     resolved_base = base or "24.04"
     return pathlib.Path(charm_paths["ubuntu"][f"ubuntu@{resolved_base}"]).resolve()
