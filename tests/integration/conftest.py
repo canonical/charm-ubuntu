@@ -1,10 +1,17 @@
 """Session-scoped charm fixture for integration tests."""
 
+from __future__ import annotations
+
 import os
 import pathlib
+from typing import TYPE_CHECKING
 
 import pytest
-from opcli.pytest_plugin import CharmPathList
+
+if TYPE_CHECKING:
+    # opcli requires Python >= 3.12 and is only present in the `tooling` group,
+    # so this import is unresolvable when pyright runs against py3.10.
+    from opcli.pytest_plugin import CharmPathList  # pyright: ignore[reportMissingImports]
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
