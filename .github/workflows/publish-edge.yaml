@@ -12,6 +12,9 @@ jobs:
     uses: canonical/charm-ci/.github/workflows/publish-artifacts.yml@5fe9ef70e1f78106e4b9c3b61ae143fe10f970d3  # v0.0.1-alpha.9
     permissions:
       actions: read
+      # contents: write is needed for the reusable workflow's final
+      # "Create GitHub Release" step (canonical/charm-ci's
+      # create-publish-release.sh).
       contents: write
     with:
       channel: latest/edge

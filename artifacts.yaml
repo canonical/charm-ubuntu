@@ -1,3 +1,8 @@
+# opcli build manifest: declares the charms/rocks/snaps to build and the
+# platforms (arch + optional runner) each artifact is built on. Consumed by
+# `opcli artifacts build` (locally and in the charm-ci build-artifacts
+# reusable workflow). Where the *tests* subsequently run is controlled by
+# spread.yaml's integration-test backend, not by this file.
 version: 1
 rocks: []
 snaps: []

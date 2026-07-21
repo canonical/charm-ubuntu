@@ -1,9 +1,14 @@
 project: charm-ubuntu
+# Path on the remote worker where spread rsyncs the project (LXD container
+# provisioned by concierge for the integration-test backend).
 path: /home/ubuntu/proj
 kill-timeout: 60m
 warn-timeout: 1m
 
 backends:
+  # integration-test is a virtual spread backend provided by opcli. Each
+  # system entry defines a runner where spread executes the tests. What
+  # gets *built* (and on which arch) is controlled by artifacts.yaml.
   integration-test:
     type: integration-test
     systems:
@@ -64,6 +69,8 @@ integration-suites:
       BASE/base_2204_juju4: "22.04"
       BASE/base_2404_juju4: "24.04"
       BASE/base_2604_juju4: "26.04"
+      # juju4 variants override CONCIERGE to point at concierge-juju4.yaml,
+      # which pins juju to 4.0/stable instead of the default 3.6/stable.
       CONCIERGE/base_2204_juju4: concierge-juju4.yaml
       CONCIERGE/base_2404_juju4: concierge-juju4.yaml
       CONCIERGE/base_2604_juju4: concierge-juju4.yaml
