@@ -1,3 +1,6 @@
+# Used by the juju4 spread variants, which override the CONCIERGE environment
+# variable to point here. Identical to concierge.yaml except that juju is
+# pinned to 4.0/stable instead of the default 3.6/stable.
 juju:
   channel: 4.0/stable
   model-defaults:

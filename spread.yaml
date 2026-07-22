@@ -54,9 +54,18 @@ integration-suites:
     backends:
       - integration-test
     auto-discover: false
+    # --base is our own pytest option, registered in
+    # tests/integration/conftest.py -- not something spread or opcli provides.
     pytest-arguments-template: |
       --base {{ env.get("BASE", "24.04") }}
     environment:
+      # `NAME/variant` is spread's variant syntax: every distinct `/suffix`
+      # across these keys is one job, and a key's value applies only to that
+      # variant. There's no partial product -- each variant is a full point in
+      # the matrix -- so BASE is spelled out per juju version even though it
+      # only depends on the base, and MODULE is repeated even though the value
+      # never changes. MODULE can't be hoisted to a plain `MODULE:`: opcli
+      # rejects a suite with `auto-discover: false` and no `MODULE/` entries.
       MODULE/base_2204_juju3: tests/integration/test_charm.py
       MODULE/base_2404_juju3: tests/integration/test_charm.py
       MODULE/base_2604_juju3: tests/integration/test_charm.py
@@ -69,8 +78,6 @@ integration-suites:
       BASE/base_2204_juju4: "22.04"
       BASE/base_2404_juju4: "24.04"
       BASE/base_2604_juju4: "26.04"
-      # juju4 variants override CONCIERGE to point at concierge-juju4.yaml,
-      # which pins juju to 4.0/stable instead of the default 3.6/stable.
       CONCIERGE/base_2204_juju4: concierge-juju4.yaml
       CONCIERGE/base_2404_juju4: concierge-juju4.yaml
       CONCIERGE/base_2604_juju4: concierge-juju4.yaml
