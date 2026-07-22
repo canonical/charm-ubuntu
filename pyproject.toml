@@ -10,6 +10,14 @@ security = ["pip-audit"]
 unit = ["pytest", "ops[testing]~=3.8"]
 coverage = ["coverage"]
 integration = ["pytest", "pytest-jubilant", "jubilant"]
+# opcli drives multi-arch builds and the spread integration harness. Kept
+# on the same charm-ci tag the reusable workflows pin, so local
+# `uv run --group tooling opcli spread run` matches CI. opcli requires
+# Python >= 3.12, but the charm itself supports >= 3.10, so gate the dep.
+tooling = ["opcli[cli] ; python_version >= '3.12'"]
+
+[tool.uv.sources]
+opcli = { git = "https://github.com/canonical/charm-ci.git", tag = "v0.0.1-alpha.9" }
 
 [tool.uv]
 # Refuse to consider distributions published in the last 7 days, giving
@@ -20,14 +28,6 @@ integration = ["pytest", "pytest-jubilant", "jubilant"]
 # coverage. Per uv docs, `exclude-newer` accepts friendly durations
 # like "7 days", "1 week", "30 days".
 exclude-newer = "7 days"
-
-# Refuse any source distribution — only install from wheels.
-# Rationale: `pip install <sdist>` / `uv sync` from an sdist runs the
-# source distribution's setup.py / PEP 517 build hooks, i.e. arbitrary
-# code execution at install time. Wheels don't run install scripts.
-# Per-package escape hatch if a future dep only ships sdist:
-# `no-build-package = ["that-one-pkg"]`.
-no-build = true
 
 [tool.ruff]
 line-length = 99

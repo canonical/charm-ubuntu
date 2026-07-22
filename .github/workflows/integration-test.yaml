@@ -1,0 +1,13 @@
+name: Integration Tests
+
+on:
+  pull_request:
+
+jobs:
+  integration-test:
+    permissions:
+      actions: read
+      contents: read
+    uses: canonical/charm-ci/.github/workflows/integration-test.yml@5fe9ef70e1f78106e4b9c3b61ae143fe10f970d3  # v0.0.1-alpha.9
+    with:
+      working-directory: .

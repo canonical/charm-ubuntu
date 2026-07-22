@@ -1,81 +1,83 @@
-project: charm-ubuntu-tests
-kill-timeout: 180m
-workers: 1
-
-environment:
-  CI: "$(HOST: echo $CI)"
+project: charm-ubuntu
+# Path on the remote worker where spread rsyncs the project (LXD container
+# provisioned by concierge for the integration-test backend).
+path: /home/ubuntu/proj
+kill-timeout: 60m
+warn-timeout: 1m
 
 backends:
-  lxd:
-    type: adhoc
-    allocate: |
-      CONTAINER_NAME="charm-ubuntu-${SPREAD_SYSTEM/./-}-${RANDOM}"
-      DISK="${DISK:-20}"
-      CPU="${CPU:-4}"
-      MEM="${MEM:-8}"
-
-      lxc launch --vm \
-        "${SPREAD_SYSTEM/-/:}" \
-        "${CONTAINER_NAME}" \
-        -c user.user-data="$(sed "s|SPREAD_PASSWORD|$SPREAD_PASSWORD|g" tests/spread/cloud-config.yaml)" \
-        -c limits.cpu="${CPU}" \
-        -c limits.memory="${MEM}GiB" \
-        -d root,size="${DISK}GiB"
-
-      # Wait for the spread user
-      while ! lxc exec "${CONTAINER_NAME}" -- id -u spread &>/dev/null; do sleep 0.5; done
-
-      # Set the instance address for spread
-      ADDRESS "$(lxc ls -f csv | grep "${CONTAINER_NAME}" | cut -d"," -f3 | cut -d" " -f1)"
-    discard: |
-      instance_name="$(lxc ls -f csv | grep $SPREAD_SYSTEM_ADDRESS | cut -f1 -d",")"
-      lxc delete -f $instance_name
-
+  # integration-test is a virtual spread backend provided by opcli. Each
+  # system entry defines a runner where spread executes the tests. What
+  # gets *built* (and on which arch) is controlled by artifacts.yaml.
+  integration-test:
+    type: integration-test
     systems:
       - ubuntu-24.04:
-          username: spread
-          workers: 1
-      - ubuntu-26.04:
-          username: spread
-          workers: 1
+          runner: [ubuntu-24.04]
+          arch: amd64
+          cpu: 4
+          memory: 8
+          disk: 40
+      - ubuntu-24.04-arm64:
+          runner: [ubuntu-24.04-arm]
+          arch: arm64
+          cpu: 4
+          memory: 8
+          disk: 40
+      - ubuntu-24.04-ppc64el:
+          runner: [self-hosted-linux-ppc64el-noble-edge]
+          arch: ppc64el
+          cpu: 4
+          memory: 8
+          disk: 40
+      - ubuntu-24.04-s390x:
+          runner: [self-hosted-linux-s390x-noble-medium]
+          arch: s390x
+          cpu: 4
+          memory: 8
+          disk: 40
 
-suites:
-  tests/spread/integration/:
-    summary: Spread tests - charm integration tests
-    environment:
-      CONCIERGE_JUJU_CHANNEL/juju_3_6: 3.6/stable
-      CONCIERGE_JUJU_CHANNEL/juju_4_0: 4.0/stable
-    prepare-each: |
-      snap install --classic concierge
-      concierge prepare --trace -p machine --extra-snaps astral-uv --extra-debs make
-
-      pushd "$SPREAD_PATH"
-
-      if [[ -f "$PWD"/ubuntu_*.charm ]]; then
-        chown $(id -u):$(id -g) "$PWD"/ubuntu_*.charm
-      fi
-    restore-each: |
-      if [[ -z "${CI:-}" ]]; then
-        concierge restore --trace
-        apt autoremove -y --purge
-      fi
-
-  tests/spread/unit/:
-    summary: Spread tests - unit tests
-    prepare-each: |
-      sudo apt update
-      sudo apt install -y make
-      sudo snap install --classic astral-uv
+environment:
+  CONCIERGE: '$(HOST: echo "${CONCIERGE:-concierge.yaml}")'
+  OPCLI_GIT_REF: '$(HOST: echo "${OPCLI_GIT_REF:-main}")'
 
 exclude:
-  - .coverage
-  - .github
-  - .pytest_cache
-  - .ruff_cache
+  - .git
   - .tox
   - .venv
+  - .*_cache
 
-# this needs to be under /root because spread executes the test scripts
-# as root, which means that juju can only see files in root's
-# home directory due to snap confinement.
-path: /root/proj
+integration-suites:
+  tests/integration/:
+    working-dir: ./
+    summary: charm-ubuntu integration tests
+    backends:
+      - integration-test
+    auto-discover: false
+    # --base is our own pytest option, registered in
+    # tests/integration/conftest.py -- not something spread or opcli provides.
+    pytest-arguments-template: |
+      --base {{ env.get("BASE", "24.04") }}
+    environment:
+      # `NAME/variant` is spread's variant syntax: every distinct `/suffix`
+      # across these keys is one job, and a key's value applies only to that
+      # variant. There's no partial product -- each variant is a full point in
+      # the matrix -- so BASE is spelled out per juju version even though it
+      # only depends on the base, and MODULE is repeated even though the value
+      # never changes. MODULE can't be hoisted to a plain `MODULE:`: opcli
+      # rejects a suite with `auto-discover: false` and no `MODULE/` entries.
+      MODULE/base_2204_juju3: tests/integration/test_charm.py
+      MODULE/base_2404_juju3: tests/integration/test_charm.py
+      MODULE/base_2604_juju3: tests/integration/test_charm.py
+      MODULE/base_2204_juju4: tests/integration/test_charm.py
+      MODULE/base_2404_juju4: tests/integration/test_charm.py
+      MODULE/base_2604_juju4: tests/integration/test_charm.py
+      BASE/base_2204_juju3: "22.04"
+      BASE/base_2404_juju3: "24.04"
+      BASE/base_2604_juju3: "26.04"
+      BASE/base_2204_juju4: "22.04"
+      BASE/base_2404_juju4: "24.04"
+      BASE/base_2604_juju4: "26.04"
+      CONCIERGE/base_2204_juju4: concierge-juju4.yaml
+      CONCIERGE/base_2404_juju4: concierge-juju4.yaml
+      CONCIERGE/base_2604_juju4: concierge-juju4.yaml

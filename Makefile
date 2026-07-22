@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help lint format unit integration integration-debug integration-execution
+.PHONY: help lint format unit integration integration-debug
 
 help:  ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -17,11 +17,8 @@ format:  ## Format and auto-fix with ruff
 unit:  ## Run unit tests
 	uv run --locked --group unit pytest --tb native --show-capture=no --log-cli-level=INFO -s tests/unit
 
-integration:  ## Run integration tests via spread
-	charmcraft.spread -v
+integration:  ## Run integration tests via opcli/spread
+	uv run --locked --group tooling opcli spread run
 
-integration-debug:  ## Run integration tests via spread, dropping into a shell on failure
-	charmcraft.spread -v -debug
-
-integration-execution:  ## Run the integration test pytest invocation directly (used inside the spread VM)
-	uv run --locked --group integration pytest --tb native --show-capture=no --log-cli-level=INFO -s --disable-warnings tests/integration $(ARGS)
+integration-debug:  ## Run integration tests via opcli/spread, dropping into a shell on failure
+	uv run --locked --group tooling opcli spread run -- -debug

@@ -1,9 +1,18 @@
 """Session-scoped charm fixture for integration tests."""
 
+from __future__ import annotations
+
 import os
 import pathlib
+from typing import Protocol
 
 import pytest
+
+
+class _CharmPaths(Protocol):
+    """The subset of opcli's ``CharmPathList`` that we rely on."""
+
+    def __getitem__(self, base: str) -> str: ...
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
@@ -23,10 +32,7 @@ def base(request: pytest.FixtureRequest) -> str | None:
 
 
 @pytest.fixture(scope="session")
-def charm() -> pathlib.Path:
+def charm(charm_paths: dict[str, _CharmPaths], base: str | None) -> pathlib.Path:
     """Return the path of the charm under test."""
-    charm_path = os.environ.get("CHARM_PATH")
-    if not charm_path:
-        charm_dir = pathlib.Path()
-        charm_path = next(charm_dir.glob("*.charm"))
-    return pathlib.Path(charm_path).resolve()
+    resolved_base = base or "24.04"
+    return pathlib.Path(charm_paths["ubuntu"][f"ubuntu@{resolved_base}"]).resolve()

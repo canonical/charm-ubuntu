@@ -1,7 +1,0 @@
-summary: Run charm-ubuntu unit tests
-systems:
-  - ubuntu-26.04
-
-execute: |
-  pushd "$SPREAD_PATH"
-  make unit

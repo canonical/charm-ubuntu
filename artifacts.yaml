@@ -1,0 +1,19 @@
+# opcli build manifest: declares the charms/rocks/snaps to build and the
+# platforms (arch + optional runner) each artifact is built on. Consumed by
+# `opcli artifacts build` (locally and in the charm-ci build-artifacts
+# reusable workflow). Where the *tests* subsequently run is controlled by
+# spread.yaml's integration-test backend, not by this file.
+version: 1
+rocks: []
+snaps: []
+charms:
+  - name: ubuntu
+    charmcraft-yaml: charmcraft.yaml
+    platforms:
+      - arch: amd64
+      - arch: arm64
+        runner: [ubuntu-24.04-arm]
+      - arch: ppc64el
+        runner: [self-hosted-linux-ppc64el-noble-edge]
+      - arch: s390x
+        runner: [self-hosted-linux-s390x-noble-medium]
