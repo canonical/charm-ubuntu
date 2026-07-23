@@ -8,6 +8,13 @@ jobs:
     permissions:
       actions: read
       contents: read
+      # The charm-ci build job declares packages: write (for pushing rock
+      # images to the registry). Reusable workflows can't request permissions
+      # conditionally, so the caller must grant it even when no images are
+      # pushed — without it every run fails at startup with "the nested job
+      # 'build' is requesting 'packages: write', but is only allowed
+      # 'packages: none'".
+      packages: write
     uses: canonical/charm-ci/.github/workflows/integration-test.yml@5fe9ef70e1f78106e4b9c3b61ae143fe10f970d3  # v0.0.1-alpha.9
     with:
       working-directory: .
