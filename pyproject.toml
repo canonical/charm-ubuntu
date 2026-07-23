@@ -25,8 +25,7 @@ opcli = { git = "https://github.com/canonical/charm-ci.git", tag = "v0.0.1-alpha
 # bootstraps, CI re-resolves) a rolling quarantine on fresh releases.
 # Complements the Dependabot cooldown (which only covers Dependabot-
 # authored PRs) so the whole project has consistent 7-day quarantine
-# coverage. Per uv docs, `exclude-newer` accepts friendly durations
-# like "7 days", "1 week", "30 days".
+# coverage.
 exclude-newer = "7 days"
 
 [tool.ruff]
