@@ -9,19 +9,28 @@ permissions: {}
 
 jobs:
   publish:
-    uses: canonical/charm-ci/.github/workflows/publish-artifacts.yml@5fe9ef70e1f78106e4b9c3b61ae143fe10f970d3  # v0.0.1-alpha.9
+    uses: canonical/charm-ci/.github/workflows/publish-artifacts.yml@f0746f4dab15ea08354d38024b188b38576b944a  # v0.0.1-alpha.10
     permissions:
       actions: read
-      # contents: write is needed for the reusable workflow's final
-      # "Create GitHub Release" step (canonical/charm-ci's
+      # contents: write is needed for the reusable workflow's tagging and
+      # "Create GitHub Release" steps (canonical/charm-ci's
       # create-publish-release.sh).
       contents: write
     with:
       channel: latest/edge
       integration-workflow-name: integration-test.yaml
-    # CHARMCRAFT_AUTH must be a repository secret. GitHub Actions forbids
-    # `environment:` on jobs that call a reusable workflow, so scoping the
-    # CharmHub credential to a GitHub environment isn't possible until
-    # canonical/charm-ci's publish-artifacts.yml accepts an environment input.
+      # ubuntu is a multi-base charm, so a single publish creates several
+      # CharmHub revisions. Keep a per-revision git tag for traceability, but
+      # collapse the GitHub Releases into one combined release per publish run
+      # instead of one per revision (which produced five "ubuntu revNN"
+      # releases at a time).
+      create-tags: true
+      create-release: true
+      # Scopes the reusable workflow's publish job to this environment, giving
+      # a deployment record for every CharmHub publish. The token itself is
+      # still the repository secret below: GitHub Actions forbids
+      # `environment:` on a job that calls a reusable workflow, so the caller
+      # can only read repo-level secrets.
+      environment: charmhub-edge
     secrets:
       CHARMHUB_TOKEN: ${{ secrets.CHARMCRAFT_AUTH }}
