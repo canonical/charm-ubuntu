@@ -22,12 +22,9 @@ jobs:
       # Scopes the reusable workflow's `publish` job to the charmhub-edge
       # environment, so publishing is gated by that environment's protection
       # rules (and shows up in the environment's deployment history).
-      #
-      # Note: the `secrets:` block below is evaluated in *this* workflow's
-      # context, which has no environment, so CHARMCRAFT_AUTH is still read
-      # from a repository secret. To hold the credential as an environment
-      # secret instead, it would have to be named CHARMHUB_TOKEN in the
-      # charmhub-edge environment and passed with `secrets: inherit`.
+      # Note: this requires that there is a `CHARMHUB_TOKEN` in the
+      # `charmhub-edge` environment, that contains an exported token from
+      # `charmcraft` with the appropriate privileges.
       environment: charmhub-edge
     secrets:
       CHARMHUB_TOKEN: ${{ secrets.CHARMCRAFT_AUTH }}
