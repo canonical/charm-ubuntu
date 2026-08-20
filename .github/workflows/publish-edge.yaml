@@ -26,9 +26,12 @@ jobs:
       # there and in the combined release body.
       create-tags: false
       create-release: true
-    # CHARMCRAFT_AUTH must be a repository secret. GitHub Actions forbids
-    # `environment:` on jobs that call a reusable workflow, so scoping the
-    # CharmHub credential to a GitHub environment isn't possible until
-    # canonical/charm-ci's publish-artifacts.yml accepts an environment input.
+      # Scopes the reusable workflow's `publish` job to the charmhub-edge
+      # environment, so publishing is gated by that environment's protection
+      # rules (and shows up in the environment's deployment history).
+      # Note: this requires that there is a `CHARMHUB_TOKEN` in the
+      # `charmhub-edge` environment, that contains an exported token from
+      # `charmcraft` with the appropriate privileges.
+      environment: charmhub-edge
     secrets:
       CHARMHUB_TOKEN: ${{ secrets.CHARMCRAFT_AUTH }}
