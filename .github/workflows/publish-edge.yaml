@@ -9,7 +9,7 @@ permissions: {}
 
 jobs:
   publish:
-    uses: canonical/charm-ci/.github/workflows/publish-artifacts.yml@f0746f4dab15ea08354d38024b188b38576b944a  # v0.0.1-alpha.10
+    uses: canonical/charm-ci/.github/workflows/publish-artifacts.yml@0eef5b8cbef3ee74907850f790cab64bcf0499e5  # v1.0.0
     permissions:
       actions: read
       # contents: write is needed for the reusable workflow's final

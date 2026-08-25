@@ -15,6 +15,6 @@ jobs:
       # 'build' is requesting 'packages: write', but is only allowed
       # 'packages: none'".
       packages: write
-    uses: canonical/charm-ci/.github/workflows/integration-test.yml@f0746f4dab15ea08354d38024b188b38576b944a  # v0.0.1-alpha.10
+    uses: canonical/charm-ci/.github/workflows/integration-test.yml@0eef5b8cbef3ee74907850f790cab64bcf0499e5  # v1.0.0
     with:
       working-directory: .

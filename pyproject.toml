@@ -17,7 +17,7 @@ integration = ["pytest", "pytest-jubilant", "jubilant"]
 tooling = ["opcli[cli] ; python_version >= '3.12'"]
 
 [tool.uv.sources]
-opcli = { git = "https://github.com/canonical/charm-ci.git", tag = "v0.0.1-alpha.10" }
+opcli = { git = "https://github.com/canonical/charm-ci.git", tag = "v1.0.0" }
 
 [tool.uv]
 # Refuse to consider distributions published in the last 7 days, giving

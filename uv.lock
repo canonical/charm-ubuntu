@@ -113,7 +113,7 @@ lint = [
     { name = "zizmor" },
 ]
 security = [{ name = "pip-audit" }]
-tooling = [{ name = "opcli", extras = ["cli"], marker = "python_full_version >= '3.12'", git = "https://github.com/canonical/charm-ci.git?tag=v0.0.1-alpha.10" }]
+tooling = [{ name = "opcli", extras = ["cli"], marker = "python_full_version >= '3.12'", git = "https://github.com/canonical/charm-ci.git?tag=v1.0.0" }]
 unit = [
     { name = "ops", extras = ["testing"], specifier = "~=3.8" },
     { name = "pytest" },
@@ -621,8 +621,8 @@ wheels = [
 
 [[package]]
 name = "opcli"
-version = "0.0.1a10"
-source = { git = "https://github.com/canonical/charm-ci.git?tag=v0.0.1-alpha.10#f0746f4dab15ea08354d38024b188b38576b944a" }
+version = "1.0.0"
+source = { git = "https://github.com/canonical/charm-ci.git?tag=v1.0.0#0eef5b8cbef3ee74907850f790cab64bcf0499e5" }
 dependencies = [
     { name = "pydantic" },
     { name = "ruamel-yaml" },
