@@ -19,6 +19,13 @@ jobs:
     with:
       channel: latest/edge
       integration-workflow-name: integration-test.yaml
+      # ubuntu is a multi-base charm, so a single publish creates several
+      # CharmHub revisions, and previously one GitHub Release per revision.
+      # Publish a single combined release per run listing them all, and skip
+      # the per-revision git tags: CharmHub revisions are already tracked
+      # there and in the combined release body.
+      create-tags: false
+      create-release: true
       # Scopes the reusable workflow's `publish` job to the charmhub-edge
       # environment, so publishing is gated by that environment's protection
       # rules (and shows up in the environment's deployment history).
