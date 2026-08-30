@@ -9,7 +9,8 @@ clients:
 # The bases below must match the platforms in charmcraft.yaml: every base we
 # build and publish needs to be scanned.
 artifacts:
-  - name: ubuntu
+  - name: ubuntu-22.04
+    charm: ubuntu
     type: charm
     channel: 'latest/stable'
     base: ubuntu@22.04
@@ -18,7 +19,8 @@ artifacts:
       version: ''  # auto-detect from the downloaded revision
       channel: 'stable'
 
-  - name: ubuntu
+  - name: ubuntu-24.04
+    charm: ubuntu
     type: charm
     channel: 'latest/stable'
     base: ubuntu@24.04
@@ -27,7 +29,8 @@ artifacts:
       version: ''
       channel: 'stable'
 
-  - name: ubuntu
+  - name: ubuntu-26.04
+    charm: ubuntu
     type: charm
     channel: 'latest/stable'
     base: ubuntu@26.04
