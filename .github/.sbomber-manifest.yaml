@@ -6,8 +6,10 @@ clients:
     team: charm_tech
   secscan: {}
 
-# The bases below must match the platforms in charmcraft.yaml: every base we
-# build and publish needs to be scanned.
+# One entry per base that we build and publish. charmcraft.yaml has four
+# architectures for each of these, but sbomber downloads charms with
+# `juju download --base` and never passes `--arch`, so every entry here is
+# whatever architecture the runner is: amd64.
 artifacts:
   - name: ubuntu-22.04
     charm: ubuntu
