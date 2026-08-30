@@ -1,26 +1,14 @@
 name: SBOM and secscan
 
-on:  # zizmor: ignore[dangerous-triggers]
-  # workflow_run only ever checks out this repository's default branch here
-  # (no PR head, no untrusted inputs), so the usual workflow_run risk of
-  # running attacker-controlled code with elevated permissions doesn't apply.
+on:
+  workflow_call:
   workflow_dispatch:
-  # Charms only reach latest/stable via the promote workflow, so scan whatever
-  # was just promoted. The schedule below is the SSDLC backstop for cycles
-  # where nothing is promoted.
-  workflow_run:
-    workflows: ["Promote charm"]
-    types: [completed]
-  schedule:
-    # Run on the 10th of April and October, aligned to the Canonical release cycle.
-    - cron: "0 0 10 4,10 *"
 
 permissions: {}
 
 jobs:
   scan:
     name: SBOM and secscan
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: [self-hosted, self-hosted-linux-amd64-jammy-private-endpoint-medium]
     permissions:
       contents: read
