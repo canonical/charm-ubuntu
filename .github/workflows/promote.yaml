@@ -85,3 +85,11 @@ jobs:
             echo "Releasing revision $revision to $TRACK/$TO_CHANNEL"
             charmcraft release "$charm_name" --revision "$revision" --channel="$TRACK/$TO_CHANNEL"
           done < revisions.txt
+
+  sbom:
+    name: SBOM and secscan
+    needs: promote
+    if: inputs.to-channel == 'stable' && inputs.track == 'latest'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/sbom-secscan.yaml
