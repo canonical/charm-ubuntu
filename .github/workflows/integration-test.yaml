@@ -18,3 +18,10 @@ jobs:
     uses: canonical/charm-ci/.github/workflows/integration-test.yml@58ae6614a3b143d4e57eff0fd1770e97d8c30fab  # v1.0.1
     with:
       working-directory: .
+      # s390x builds routinely take 45-47 minutes (the other architectures take
+      # 6-14), so charm-ci's default 60-minute limit times them out ("exceeded
+      # the maximum execution time") on a slow day.
+      # The test jobs wait build-timeout-minutes + 10 for the artifacts inside
+      # their own 120-minute limit, so going much higher needs
+      # test-timeout-minutes raised as well.
+      build-timeout-minutes: 90
