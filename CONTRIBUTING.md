@@ -81,7 +81,7 @@ The `format`, `lint`, and `unit` actions run the `make` targets with the same na
 
 The `pi` action runs Pi in the workshop, where it can reach the project directory but not the rest of your host. Pi's settings and credentials are kept in a mount, so they survive `workshop refresh`.
 
-There's no integration test action, because Spread needs LXD VMs and packing the charm needs Charmcraft. Run `make integration` on your host.
+There's no integration test action. Spread runs the tests in an LXD VM, and the workshop has no KVM. Packing the charm also fails in the workshop, because snapd won't start in Charmcraft's nested build container. Run `make integration` on your host.
 
 # Publishing
 

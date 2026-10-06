@@ -13,9 +13,10 @@ sdks:
 
 # The checks CONTRIBUTING.md asks for, through the Makefile targets.
 #
-# There is deliberately no integration action. Spread launches an LXD VM for
-# each base, and packing the charm needs Charmcraft, and an unprivileged
-# container can't do either. Run them on the host instead.
+# There is deliberately no integration action. Spread runs the tests in an LXD
+# VM, and the workshop has no KVM. Packing the charm fails too, because snapd
+# won't start in Charmcraft's nested LXD build container. Run them on the host
+# instead.
 actions:
   format: make format
   lint: make lint
