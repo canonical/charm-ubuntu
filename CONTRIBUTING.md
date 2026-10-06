@@ -56,16 +56,16 @@ make unit          # Unit tests
 make integration   # Integration tests, run in an isolated VM via Spread
 ```
 
-`make integration` invokes [`charmcraft.spread`](https://github.com/canonical/spread/), which spins up an LXD VM, prepares it with [concierge](https://github.com/canonical/concierge), and runs the integration tests against each supported Ubuntu base. Use `make integration-debug` to drop into a shell on failure.
+`make integration` runs the tests with [opcli](https://github.com/canonical/charm-ci) and [Spread](https://github.com/canonical/spread/). Each job gets a fresh LXD VM, prepared with [concierge](https://github.com/canonical/concierge), and the jobs cover each supported Ubuntu base with both Juju 3 and Juju 4. The tests deploy the charm you've already packed, so build it first with `uv run --group tooling opcli artifacts build`, which writes `build/artifacts.build.yaml`. Use `make integration-debug` to drop into a shell on failure.
 
-To select an individual spread task, run `charmcraft.spread` directly:
+To run a single job, list the selectors and pass one through to Spread:
 
 ```bash
-charmcraft.spread -list
-charmcraft.spread -v -debug -reuse lxd:ubuntu-26.04:tests/spread/integration/ubuntu-24.04:juju_3_6
+uv run --group tooling opcli spread run -- -list
+uv run --group tooling opcli spread run -- integration-test-local:ubuntu-24.04:build/tests/integration/run:base_2404_juju3
 ```
 
-If you already have a Juju controller and a machine cloud set up and want to skip the spread wrapper, `make integration-execution` runs the pytest invocation directly (this is the same target the spread VM uses internally).
+If you already have a Juju controller and a machine cloud set up and want to skip Spread, `uv run --group tooling opcli pytest run` runs the same `tox -e integration` invocation that the Spread VM uses. It also needs the charm built first, and tests on 24.04 unless you set `BASE`, for example `BASE=22.04`.
 
 ## Developing in a workshop
 
@@ -77,7 +77,7 @@ workshop launch dev
 workshop run dev lint
 ```
 
-The `format`, `lint`, and `unit` actions run the `make` targets with the same names. The workshop keeps its virtual environment outside the project directory, so it doesn't share or overwrite the `.venv` on your host.
+The `format`, `lint`, and `unit` actions run the `make` targets with the same names. Extra arguments to `unit` are passed to `pytest`, so `workshop run dev unit -k test_hostname` is the same as `make unit ARGS='-k test_hostname'`. An argument containing whitespace won't survive: the `make` recipe expands `$(ARGS)` unquoted, so `-k 'test_a and not test_b'` reaches `pytest` as four arguments whether you go through the workshop or run `make` yourself. The workshop keeps its virtual environment outside the project directory, so it doesn't share or overwrite the `.venv` on your host.
 
 The `pi` action runs Pi in the workshop, where it can reach the project directory but not the rest of your host. Pi's settings and credentials are kept in a mount, so they survive `workshop refresh`.
 

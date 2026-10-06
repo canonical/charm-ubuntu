@@ -21,4 +21,4 @@ actions:
   format: make format
   lint: make lint
   pi: pi "$@"
-  unit: make unit
+  unit: make unit ARGS="$*"
