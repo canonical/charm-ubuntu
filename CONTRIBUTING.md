@@ -67,6 +67,22 @@ charmcraft.spread -v -debug -reuse lxd:ubuntu-26.04:tests/spread/integration/ubu
 
 If you already have a Juju controller and a machine cloud set up and want to skip the spread wrapper, `make integration-execution` runs the pytest invocation directly (this is the same target the spread VM uses internally).
 
+## Developing in a workshop
+
+The `dev` [Workshop](https://ubuntu.com/workshop) in `.workshop/` is a container with uv, `make`, the charm's development dependencies, and the [Pi](https://pi.dev) coding agent. You don't need to install any of them on your host:
+
+```bash
+sudo snap install workshop --classic  # If you don't have it already.
+workshop launch dev
+workshop run dev lint
+```
+
+The `format`, `lint`, and `unit` actions run the `make` targets with the same names. The workshop keeps its virtual environment outside the project directory, so it doesn't share or overwrite the `.venv` on your host.
+
+The `pi` action runs Pi in the workshop, where it can reach the project directory but not the rest of your host. Pi's settings and credentials are kept in a mount, so they survive `workshop refresh`.
+
+There's no integration test action, because Spread needs LXD VMs and packing the charm needs Charmcraft. Run `make integration` on your host.
+
 # Publishing
 
 Every merge to `master` is packed and released to `latest/edge` by the [Publish to edge](.github/workflows/publish-edge.yaml) workflow. That workflow is also the only thing that creates GitHub releases in this repo: its final step (in `canonical/charm-ci`) tags the commit and publishes a release for the packed charm, which is why the job needs `contents: write`. Promotion to `beta`, `candidate`, or `stable` is done manually via the [Promote charm](.github/workflows/promote.yaml) workflow (Actions → Promote charm → Run workflow), which is gated by a required-reviewer approval on the `charmhub-promote` environment.
