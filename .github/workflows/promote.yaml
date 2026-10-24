@@ -92,4 +92,4 @@ jobs:
     if: inputs.to-channel == 'stable' && inputs.track == 'latest'
     permissions:
       contents: read
-    uses: ./.github/workflows/sbom-secscan.yaml
+    uses: $/.github/workflows/sbom-secscan.yaml
