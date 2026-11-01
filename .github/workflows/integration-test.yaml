@@ -15,7 +15,7 @@ jobs:
       # 'build' is requesting 'packages: write', but is only allowed
       # 'packages: none'".
       packages: write
-    uses: canonical/charm-ci/.github/workflows/integration-test.yml@58ae6614a3b143d4e57eff0fd1770e97d8c30fab  # v1.0.1
+    uses: canonical/charm-ci/.github/workflows/integration-test.yml@14b1cf49d48b9d5b96192d9bca2890c98b7295cf  # v1.0.2
     with:
       working-directory: .
       # s390x builds routinely take 45-47 minutes (the other architectures take
