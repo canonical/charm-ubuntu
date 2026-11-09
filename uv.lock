@@ -115,7 +115,7 @@ lint = [
 security = [{ name = "pip-audit" }]
 tooling = [{ name = "opcli", extras = ["cli"], marker = "python_full_version >= '3.12'", git = "https://github.com/canonical/charm-ci.git?tag=v1.0.0" }]
 unit = [
-    { name = "ops", extras = ["testing"], specifier = "~=3.8" },
+    { name = "ops", extras = ["testing"], specifier = "~=3.9" },
     { name = "pytest" },
 ]
 
