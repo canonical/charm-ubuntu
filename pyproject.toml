@@ -7,7 +7,7 @@ dependencies = ["ops~=3.8"]
 [dependency-groups]
 lint = ["ruff", "pyright[nodejs]", "zizmor"]
 security = ["pip-audit"]
-unit = ["pytest", "ops[testing]~=3.8"]
+unit = ["pytest", "ops[testing]~=3.9"]
 coverage = ["coverage"]
 integration = ["pytest", "pytest-jubilant", "jubilant"]
 # opcli drives multi-arch builds and the spread integration harness. Kept
