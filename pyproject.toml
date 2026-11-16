@@ -6,7 +6,15 @@ dependencies = ["ops~=3.8"]
 
 [dependency-groups]
 lint = ["ruff", "pyright", "zizmor"]
-security = ["pip-audit"]
+security = [
+  # pip-audit only runs in CI on the runner's default Python (see
+  # security.yaml), never on 3.10. Gating it lets the lock drop the 3.10-only
+  # filelock 3.x (filelock >= 4.2.1, which fixes the open GHSA advisories,
+  # requires Python >= 3.11). filelock is transitive via
+  # pip-audit -> cachecontrol[filecache]; the floor keeps it past the fixes.
+  "pip-audit ; python_version >= '3.11'",
+  "filelock>=4.2.1 ; python_version >= '3.11'",
+]
 unit = ["pytest", "ops[testing]~=3.8"]
 coverage = ["coverage"]
 integration = ["pytest", "pytest-jubilant", "jubilant"]
