@@ -9,9 +9,7 @@ lint = ["ruff", "pyright[nodejs]", "zizmor"]
 security = [
   # pip-audit only runs in CI on the runner's default Python (see
   # security.yaml), never on 3.10. Gating it lets the lock drop the 3.10-only
-  # filelock 3.x (filelock >= 4.2.1, which fixes the open GHSA advisories,
-  # requires Python >= 3.11). filelock is transitive via
-  # pip-audit -> cachecontrol[filecache]; the floor keeps it past the fixes.
+  # filelock 3.x (filelock >= 4.2.1.
   "pip-audit ; python_version >= '3.11'",
   "filelock>=4.2.1 ; python_version >= '3.11'",
 ]
