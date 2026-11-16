@@ -15,7 +15,7 @@ format:  ## Format and auto-fix with ruff
 	uv run --group lint ruff format
 
 unit:  ## Run unit tests
-	uv run --locked --group unit pytest --tb native --show-capture=no --log-cli-level=INFO -s tests/unit
+	uv run --locked --group unit pytest --tb native --show-capture=no --log-cli-level=INFO -s tests/unit $(ARGS)
 
 integration:  ## Run integration tests via opcli/spread
 	uv run --locked --group tooling opcli spread run

@@ -1,0 +1,42 @@
+clients:
+  sbom:
+    service_url: https://sbom-request.canonical.com
+    department: charm_engineering
+    email: tony.meyer@canonical.com
+    team: charm_tech
+  secscan: {}
+
+# One entry per base that we build and publish. charmcraft.yaml has four
+# architectures for each of these, but sbomber downloads charms with
+# `juju download --base` and never passes `--arch`, so every entry here is
+# whatever architecture the runner is: amd64.
+artifacts:
+  - name: ubuntu-22.04
+    charm: ubuntu
+    type: charm
+    channel: 'latest/stable'
+    base: ubuntu@22.04
+    ssdlc_params:
+      name: ubuntu
+      version: ''  # auto-detect from the downloaded revision
+      channel: 'stable'
+
+  - name: ubuntu-24.04
+    charm: ubuntu
+    type: charm
+    channel: 'latest/stable'
+    base: ubuntu@24.04
+    ssdlc_params:
+      name: ubuntu
+      version: ''
+      channel: 'stable'
+
+  - name: ubuntu-26.04
+    charm: ubuntu
+    type: charm
+    channel: 'latest/stable'
+    base: ubuntu@26.04
+    ssdlc_params:
+      name: ubuntu
+      version: ''
+      channel: 'stable'

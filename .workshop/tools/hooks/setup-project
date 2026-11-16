@@ -1,0 +1,12 @@
+# The default `.venv` would clash with the host's in the mounted project
+# directory. Workshop's SDK guidance is ~/.profile for the workshop user's own
+# variables; this hook runs uv itself, so it needs the variable in scope as
+# well.
+export UV_PROJECT_ENVIRONMENT=/home/workshop/.venvs/charm-ubuntu
+cat <<EOF >> ~/.profile
+
+export UV_PROJECT_ENVIRONMENT=$UV_PROJECT_ENVIRONMENT
+EOF
+
+# Install the groups that `make lint` and `make unit` use.
+uv sync --locked --group lint --group unit --group integration
